@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ru" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="css/index.css" rel="stylesheet">
+    <link href="css/testSpeed.css" rel="stylesheet">
+    <link href="css/plusMinus.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <title>Smarty Games</title>
+</head>
+
+<body id="grid">
+<header id="pageHeader">
+    <a class="logo" href="index.html">  <img src="resourses/logoHeader.png" alt="логотип" height="100" ></a>
+    <div class="menu">
+        <div><a href="index.html" class="menu-item isActive">Главная</a></div>
+        <div><a href="about.html" class="menu-item">О проекте</a></div>
+        <div><a href="contacts.html" class="menu-item">Контакты</a></div>
+    </div>
+</header>
+
+<div class="pageTestSpeed" id="appTestSpeed">
+    <div class="settings">
+        <div class="settingsBlock">
+            <label class="label" for="speed" >слова:</label>
+            <input  id="speed" class="inputSettings" type="number" v-model="wordsCounter" readonly ><!--min="0" v-model="speed" :disabled="disabledExample"-->
+        </div>
+        <div class="settingsBlock">
+            <label class="label" for="length">время:</label>
+            <input id="length" class="inputSettings" type="number" v-model="timerCounter" readonly><!-- min="2" v-model="lengthExample" :disabled="disabledExample"-->
+        </div>
+    </div>
+
+       <div class="textArea" id="startTest">
+           <p><label class="label">{{labelText}}</label></p>
+           <p id='output' class="inputTextArea"><textarea class="textTest" placeholder="или вставьте сюда свой текст и
+ Нажмите кнопку 'Старт'" id="autosize" v-show="visible" v-model="myText"></textarea> {{textArea}} </p>
+       </div>
+
+    <div class="speedTestButtons">
+        <a href="#startTest"><button class="buttonStart" v-on:click="startTest" :disabled="disabledStart" >Старт</button></a>
+        <button class="buttonStop" v-on:click="stopTest" :disabled="disabledStop">Стоп</button>
+    </div>
+
+</div>
+
+<footer id="pageFooter">Copyright @ <a href="" class="menu-item">Smarty-Games.ru</a></footer>
+
+<script>
+
+</script>
+<script src="js/testSpeed.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autosize.js/4.0.2/autosize.min.js"></script>
+<script>autosize(document.querySelectorAll('#autosize'));</script>
+</body>
+</html>

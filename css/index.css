@@ -1,0 +1,65 @@
+#grid {
+    display: grid;
+    grid-template-rows: min-content 1fr 70px;
+    min-height: 100%;
+    margin: 0;
+}
+
+html {
+    height: 100%;
+}
+
+header, footer {
+    padding: 20px;
+    background: black;
+    color: white;
+    text-align: center;
+}
+
+header {
+   min-height: 0;
+   height: fit-content;
+   margin-bottom: 20px;
+}
+
+a {text-decoration: none; /*убираем подчеркивание текста ссылок*/}
+
+.logo {
+    min-width: 100px;
+    max-height: 200px;
+    height: auto;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.menu {
+    display: grid;
+    text-align: center;
+    font-size: 1.7rem;
+    font-weight: bold;
+    list-style: none;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 30px;
+    grid-column-gap: 0.4rem;
+//   margin-right: 5%;
+//    margin-left: 5%;
+}
+
+.menu-item {
+    color: white;
+    text-align: center;
+    padding: 0.5rem;
+}
+
+.isActive {
+    color: black;
+    background: white;
+}
+
+.menu-item:hover {
+    color: black;
+    background: white;
+}
+
+

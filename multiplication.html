@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="css/index.css" rel="stylesheet">
+    <link href="css/plusMinus.css" rel="stylesheet">
+    <link href="css/multiplication.css" rel="stylesheet">
+    <link href="css/circles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <title>Smarty Games</title>
+</head>
+
+<body id="grid">
+<header id="pageHeader">
+    <a class="logo" href="index.html">  <img src="resourses/logoHeader.png" alt="логотип" height="100" ></a>
+    <div class="menu">
+        <div><a href="index.html" class="menu-item isActive">Главная</a></div>
+        <div><a href="about.html" class="menu-item">О проекте</a></div>
+        <div><a href="contacts.html" class="menu-item">Контакты</a></div>
+    </div>
+</header>
+
+<div class="pageMultiplication" id="app">
+    <label class="rightCount">Правильно: <a>{{rightCounter}}</a></label>
+
+    <div>
+    <div class="settings">
+        <div>
+            <label class="label" for="num1" >Число №1:</label>
+            <input  id="num1" class="inputSettings" type="number" v-model="number1For" >
+        </div>
+        <div>
+            <label class="label" for="num2">Число №2:</label>
+            <input id="num2" class="inputSettings" type="number"  v-model="number2For"/>
+        </div>
+    </div>
+
+    <div style="margin-top: 30px">
+    <div class="numberMultiplication" :style="{'color': colorStyle}"><sub>x</sub>{{number1}}</div>
+    <div class="numberMultiplication" style="margin-top: -50px" :style="{'color': colorStyle}">&nbsp;&nbsp;{{number2}}</div>
+    </div>
+    <input type="number" class="form"  v-model="answer" v-on:keyup.enter="answerO" :disabled="disabledAnswer" placeholder="введите ответ">
+    </div>
+        <!--  <p>Сумма: {{sum}}
+      <p>Средняя скорость: {{averageSpeed}}
+      <p>Сумма скоростей: {{speedCounter}}
+      <p>Правильно: {{exampleCounter}}
+      <p>Средняя длина: {{averageLengthExample}} -->
+    <div class="buttons">
+        <button class="buttonAnswer" v-on:click="answerO" :disabled="disabledAnswer">Ответить</button>
+        <button class="buttonExample" v-on:click="newExample">Новый пример</button>
+    </div>
+    </div>
+<footer id="pageFooter">Copyright @ <a href="" class="menu-item">Smarty-Games.ru</a></footer>
+
+<script src="js/multiplication.js"></script>
+</body>
+</html>

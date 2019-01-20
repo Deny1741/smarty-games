@@ -1,0 +1,22 @@
+#gridArticle {
+    display: grid;
+    text-align: center;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    grid-gap: 20px;
+    margin-bottom: 20px;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.frame {
+    width: 100%;
+}
+
+.logoArticle {
+    border: 5px solid #FFF5EE;
+    padding: 10%;
+}
+
+.logoArticle:hover {
+    background:	#FFF5EE;
+}

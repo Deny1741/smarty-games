@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="css/index.css" rel="stylesheet">
+    <link href="css/circles.css" rel="stylesheet">
+    <link href="css/plusMinus.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <title>Smarty Games</title>
+</head>
+
+<body id="grid">
+<header id="pageIndex">
+    <a class="logo" href="index.html">  <img src="resourses/logoHeader.png" alt="логотип" height="100" ></a>
+    <div class="menu">
+        <div><a href="index.html" class="menu-item isActive">Главная</a></div>
+        <div><a href="about.html" class="menu-item">О проекте</a></div>
+        <div><a href="contacts.html" class="menu-item">Контакты</a></div>
+    </div>
+</header>
+
+<div class="pageCircles" id="appCircle">
+    <label class="rightCount">Правильно: <a>{{rightCount}}</a></label>
+    <label class="labelCircles" :style="{'color': colorStyle}">{{number}}</label>
+
+    <form class="formCheckBox">
+    <div class="checkBox">
+    <p class="checkBoxText" for="circle128">128</p>
+    <p><input v-on:change="radioCircle128" v-model="circle128" value="false" class="option-input" type="checkbox" :disabled="disabledAnswer"/></p>
+    </div>
+
+    <div class="checkBox">
+    <p class="checkBoxText" for="circle64">64</p>
+    <p><input v-on:change="radioCircle64" v-model="circle64" class="option-input" type="checkbox" :disabled="disabledAnswer"/></p>
+    </div>
+
+    <div class="checkBox">
+    <p class="checkBoxText" for="circle32">32</p>
+    <p><input v-on:change="radioCircle32" v-model="circle32" class="option-input" type="checkbox" :disabled="disabledAnswer" /></p>
+    </div>
+
+    <div class="checkBox">
+    <p class="checkBoxText" for="circle32">16</p>
+    <p><input v-on:change="radioCircle16" v-model="circle16"  class="option-input" type="checkbox" :disabled="disabledAnswer" /></p>
+    </div>
+
+    <div class="checkBox">
+    <p class="checkBoxText" for="circle32">8</p>
+    <p><input v-on:change="radioCircle8" v-model="circle8" class="option-input" type="checkbox" :disabled="disabledAnswer"/></p>
+    </div>
+
+    <div class="checkBox">
+    <p class="checkBoxText" for="circle4">4</p>
+    <p><input v-on:change="radioCircle4" v-model="circle4" class="option-input" type="checkbox" :disabled="disabledAnswer" /></p>
+    </div>
+
+    <div class="checkBox">
+    <p class="checkBoxText" for="circle2">2</p>
+    <p><input v-on:change="radioCircle2" v-model="circle2" class="option-input" type="checkbox" :disabled="disabledAnswer" /></p>
+    </div>
+
+    <div class="checkBox">
+    <p class="checkBoxText" for="circle1">1</p>
+    <p><input v-on:change="radioCircle1" v-model="circle1" class="option-input" type="checkbox" :disabled="disabledAnswer"/></p>
+    </div>
+    </form>
+
+    <div class="buttons">
+        <button v-on:click="answerCircle" class="buttonAnswer" :disabled="disabledAnswer">Ответить</button>
+        <button v-on:click="newNumber" class="buttonExample">Новое число</button>
+    </div>
+</div>
+
+
+
+<footer id="pageFooter">Copyright @ <a href="" class="menu-item">Smarty-Games.ru</a></footer>
+
+<script src="js/circles.js"></script></body>
+</html>

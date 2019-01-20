@@ -1,0 +1,11 @@
+.pageMultiplication {
+    display: grid;
+    grid-template-rows: 100px 1fr fit-content(50px);
+    text-align: center;
+}
+
+.numberMultiplication {
+    font-size: 700%;
+    font-weight: bold;
+    text-align: center;
+}
