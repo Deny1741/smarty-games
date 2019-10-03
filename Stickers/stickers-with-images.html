@@ -9,14 +9,14 @@
 </head>
 <style>
     :root {
-        --common-background: #808080;
-        --bonus5-background: #4CAF50;
-        --bonusX2-background: #ff3366;
+        --common-background: #b0abab;
+        --bonus5-background: #73d94f;
+        --bonusX2-background: #ff58e3;
         --useful-background: #008CBA;
-        --social-background: #DA70D6;
-        --cheerful-background: #F4B183;
+        --social-background: #ab38ce;
+        --cheerful-background: #ffae7c;
         --bomb-background: #FF0000;
-        --relax-background: #4CAF50;
+        --relax-background: #006e31;
     }
 
     @media screen and (max-width: 900px) {
@@ -49,6 +49,9 @@
             margin-bottom: 100px !important;
             font-size: 48px !important;
         }
+        h1 {
+            font-size: 24px !important;
+        }
     }
 
     * {
@@ -60,10 +63,17 @@
         font-family: Helvetica, serif;
         max-width: 1200px;
         margin: 0 auto;
-        padding-right: 5px;
-        padding-left: 5px;
+      //  padding-right: 5px;
+     //   padding-left: 5px;
         line-height: 1.5;
         font-size: 16px;
+    }
+
+    h1 {
+        display: block;
+        text-align: center;
+        color: white;
+        background: #008CBA;
     }
 
     ul {
@@ -78,7 +88,7 @@
         height: 100px;
         text-align: center;
         font-size: 400%;
-        margin-top: 150px;
+        margin-top: 100px;
         margin-bottom: 150px;
         font-weight: bold;
         transition: 0.5s;
@@ -512,6 +522,7 @@
     }
 </style>
 <body>
+<h1>Дофаминовый поток</h1>
 <div id="sticker">Нажмите на&nbspкнопку</div>
 
 <div id="buttons" class="button-group">
@@ -542,7 +553,7 @@
         if (i > 0) bomb.push('+' + i*5 + ' у.е.');
     }
 
-    let relax = 'Отдых';
+    let relax = ['20 мин', '20 мин', '30 мин', '30 мин', '1 час'];
 
     // Массивы с наградами
     let arrayCommon = [];
@@ -565,8 +576,9 @@
         arraySocial = []; for (let i = 0; i < 1; i++) arraySocial.push(social[Math.floor(Math.random()*social.length)]);
         arrayCheerful = []; for (let i = 0; i < 1; i++) arrayCheerful.push(cheerful[Math.floor(Math.random()*cheerful.length)]);
         arrayBomb = []; for (let i = 0; i < 2; i++) arrayBomb.push(bomb[Math.floor(Math.random()*bomb.length)]);
-        arrayRelax = []; for (let i = 0; i < 5; i++) arrayRelax.push(relax);
+        arrayRelax = []; for (let i = 0; i < 5; i++) arrayRelax.push(relax[Math.floor(Math.random()*relax.length)]);
     };
+
 
     // Получить награду
     getSticker = () => {
