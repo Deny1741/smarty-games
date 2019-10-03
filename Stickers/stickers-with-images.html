@@ -510,7 +510,6 @@
             transform-origin: 100% 50%;
         }
     }
-
 </style>
 <body>
 <div id="sticker">Нажмите на&nbspкнопку</div>
@@ -523,11 +522,10 @@
     <button id="bomb" class="button"><img src="image-stickers/bomb.png" height="70" alt=""></button>
     <button id="maniac" class="button"><img src="image-stickers/maniac.png" height="70" alt=""></button>
 </div>
-
-
 </body>
 
 <script>
+    // Вид награды
     let common = 'Молодец!';
     let bonus5 = '+5 у.е.';
     let bonusX2 = 'х2';
@@ -546,6 +544,7 @@
 
     let relax = 'Отдых';
 
+    // Массивы с наградами
     let arrayCommon = [];
     let arrayBonus5 = [];
     let arrayBonusX2 = [];
@@ -557,6 +556,7 @@
 
     let stickers = [];
 
+    // Обновление массивов с наградами
     refreshArrays = () => {
         arrayCommon = []; for (let i = 0; i < 40; i++) arrayCommon.push(common);
         arrayBonus5 = []; for (let i = 0; i < 22; i++) arrayBonus5.push(bonus5);
@@ -568,8 +568,8 @@
         arrayRelax = []; for (let i = 0; i < 5; i++) arrayRelax.push(relax);
     };
 
+    // Получить награду
     getSticker = () => {
-
         document.getElementById('sticker').innerText = stickers[Math.floor(Math.random()*stickers.length)];
         document.getElementById('sticker').style.color = 'white';
         if (document.getElementById('sticker').innerText === bonus5) document.getElementById('sticker').style.background = 'var(--bonus5-background)';
@@ -593,9 +593,9 @@
         if (parseInt(document.getElementById('sticker').innerText) < 0)  document.getElementById('sticker').style.background = 'var(--bomb-background)';
         if (parseInt(document.getElementById('sticker').innerText) >= 0) document.getElementById('sticker').style.background = 'var(--bonus5-background)';
         if (document.getElementById('sticker').innerText === relax) document.getElementById('sticker').style.background = 'var(--relax-background)';
-
     };
 
+    // Получить награду с загрузкой
     getStickerWithLoading = () => {
         let arrayButtons = ['dopamineСharge', 'main', 'minor', 'cortisol', 'bomb', 'maniac'];
         document.getElementById('sticker').innerHTML = '<div class="holder">\n' +
@@ -610,11 +610,16 @@
 
         arrayButtons.forEach((item) => { document.getElementById(item).disabled = true; });
         document.getElementById('sticker').style.background = 'white';
+
         let timerId = setInterval(() => getSticker(), 4000);
-        setTimeout(() => { clearInterval(timerId); getSticker();
-            arrayButtons.forEach((item) => { document.getElementById(item).disabled = false; }); }, 4000);
+        setTimeout(() => {
+            clearInterval(timerId);
+            getSticker();
+            arrayButtons.forEach((item) => { document.getElementById(item).disabled = false; });
+        }, 4000);
     };
 
+    // Получить дофаминовую награду
     getDopamineSticker = () => {
         stickers = [];
         refreshArrays();
@@ -622,6 +627,7 @@
         getStickerWithLoading();
     };
 
+    // Получить главную награду
     getMainSticker = () => {
         stickers = [];
         refreshArrays();
@@ -629,6 +635,7 @@
         getStickerWithLoading();
     };
 
+    // Получить награду за рутину
     getMinorSticker = () => {
         stickers = [];
         refreshArrays();
@@ -636,6 +643,7 @@
         getStickerWithLoading();
     };
 
+    // Получить кортизоловую награду
     getCortisolSticker = () => {
         stickers = [];
         refreshArrays();
@@ -643,6 +651,7 @@
         getStickerWithLoading();
     };
 
+    // Получить бомбу
     getBombSticker = () => {
         stickers = [];
         refreshArrays();
@@ -650,6 +659,7 @@
         getStickerWithLoading();
     };
 
+    // Получить награду дофаминовый маньяк
     getManiacSticker = () => {
         stickers = [];
         refreshArrays();
@@ -657,6 +667,7 @@
         getStickerWithLoading();
     };
 
+    // Привязка функций к кнопкам
     document.getElementById('dopamineСharge').onclick = () => getDopamineSticker();
     document.getElementById('main').onclick = () => getMainSticker();
     document.getElementById('minor').onclick = () => getMinorSticker();
