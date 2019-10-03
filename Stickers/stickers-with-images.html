@@ -43,6 +43,14 @@
         }
     }
 
+    @media screen and (max-width: 340px) {
+        #sticker {
+            margin-top: 50px !important;
+            margin-bottom: 100px !important;
+            font-size: 48px !important;
+        }
+    }
+
     * {
         margin: 0;
         padding: 0;
@@ -63,6 +71,9 @@
     }
 
     #sticker {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         position: relative;
         height: 100px;
         text-align: center;
@@ -502,7 +513,7 @@
 
 </style>
 <body>
-<div id="sticker">Нажмите на кнопку</div>
+<div id="sticker">Нажмите на&nbspкнопку</div>
 
 <div id="buttons" class="button-group">
     <button id="dopamineСharge" class="button"><img src="image-stickers/dofamine.png" height="70" alt=""></button>
