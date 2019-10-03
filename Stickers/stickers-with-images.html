@@ -500,7 +500,7 @@
 <body>
 <div id="sticker">Нажмите на кнопку</div>
 
-<div class="button-group">
+<div id="buttons" class="button-group">
     <button id="dopamineСharge" class="button"><img src="image-stickers/dofamine.png" height="70" alt=""></button>
     <button id="main" class="button"><img src="image-stickers/main.png" height="70" alt=""></button>
     <button id="minor" class="button "><img src="image-stickers/minor.png" height="70" alt=""></button>
@@ -582,6 +582,7 @@
     };
 
     getStickerWithLoading = () => {
+        let arrayButtons = ['dopamineСharge', 'main', 'minor', 'cortisol', 'bomb', 'maniac'];
         document.getElementById('sticker').innerHTML = '<div class="holder">\n' +
             '    <div class="flip-preloader example-1">\n' +
             '        <div></div>\n' +
@@ -591,9 +592,12 @@
             '        <div></div>\n' +
             '    </div>\n' +
             '</div>';
+
+        arrayButtons.forEach((item) => { document.getElementById(item).disabled = true; });
         document.getElementById('sticker').style.background = 'white';
         let timerId = setInterval(() => getSticker(), 4000);
-        setTimeout(() => { clearInterval(timerId); getSticker(); }, 4000);
+        setTimeout(() => { clearInterval(timerId); getSticker();
+            arrayButtons.forEach((item) => { document.getElementById(item).disabled = false; }); }, 4000);
     };
 
     getDopamineSticker = () => {
