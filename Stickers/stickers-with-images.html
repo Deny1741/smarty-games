@@ -61,12 +61,17 @@
 
     body {
         font-family: Helvetica, serif;
-        max-width: 1200px;
+     //   max-width: 1200px;
         margin: 0 auto;
       //  padding-right: 5px;
      //   padding-left: 5px;
         line-height: 1.5;
         font-size: 16px;
+    }
+
+    .wrap {
+        max-width: 1200px;
+        margin: 0 auto;
     }
 
     h1 {
@@ -523,8 +528,9 @@
 </style>
 <body>
 <h1>Дофаминовый поток</h1>
-<div id="sticker">Нажмите на&nbspкнопку</div>
 
+<div class="wrap">
+<div id="sticker">Нажмите на&nbspкнопку</div>
 <div id="buttons" class="button-group">
     <button id="dopamineСharge" class="button"><img src="image-stickers/dofamine.png" height="70" alt=""></button>
     <button id="main" class="button"><img src="image-stickers/main.png" height="70" alt=""></button>
@@ -533,8 +539,8 @@
     <button id="bomb" class="button"><img src="image-stickers/bomb.png" height="70" alt=""></button>
     <button id="maniac" class="button"><img src="image-stickers/maniac.png" height="70" alt=""></button>
 </div>
+</div>
 </body>
-
 <script>
     // Вид награды
     let common = 'Молодец!';
