@@ -9,7 +9,7 @@
 </head>
 <style>
     :root {
-        
+
         --common-background: #b0abab;
         --bonus5-background: #73d94f;
         --bonusX2-background: #ff58e3;
@@ -25,6 +25,9 @@
             margin-top: 100px !important;
             margin-bottom: 100px !important;
         }
+
+
+
         .button {
             width: 30% !important;
         }
@@ -88,7 +91,7 @@
     }
 
     #sticker {
-        display: flex;
+        display: block;
         align-items: center;
         justify-content: center;
         position: relative;
@@ -99,6 +102,10 @@
         margin-bottom: 150px;
         font-weight: bold;
         transition: 0.5s;
+    }
+
+    #sticker:first-letter {
+      //  opacity: 0;
     }
 
     .button-group {
@@ -532,7 +539,7 @@
 <h1>Дофаминовый поток</h1>
 
 <div class="wrap">
-<div id="sticker">Нажмите на&nbspкнопку</div>
+<div id="sticker" class="sticker">Нажмите на&nbspкнопку</div>
 <div id="buttons" class="button-group">
     <button id="dopamineСharge" class="button"><img src="image-stickers/dofamine.png" height="70" alt=""></button>
     <button id="main" class="button"><img src="image-stickers/main.png" height="70" alt=""></button>
@@ -545,27 +552,39 @@
 </body>
 <script>
     // Вид награды
-    let common = 'Молодец!';
+    let common = ['Я молодец!', 'Я мегакрут!'];
+
+    let bonus0 = '+0 у.е.';
     let bonus5 = '+5 у.е.';
+    let bonus10 = '+10 у.е.';
+    let bonus15 = '+15 у.е.';
+    let bonus20 = '+20 у.е.';
+
     let bonusX2 = 'х2';
     let useful = [];
     let social = [];
     let cheerful = [];
     let bomb = [];
 
-    for (let i = 1; i <= 15; i++) useful.push('№' + i);
-    for (let i = 1; i <= 6; i++) social.push('№' + i);
-    for (let i = 1; i <= 10; i++) cheerful.push('№' + i);
+    for (let i = 1; i <= 15; i++) useful.push('U№' + i);
+    for (let i = 1; i <= 6; i++) social.push('S№' + i);
+    for (let i = 1; i <= 10; i++) cheerful.push('C№' + i);
     for (let i = -3; i <= 3; i++) {
         if (i < 0) bomb.push(i*5 + ' у.е.');
-        if (i > 0) bomb.push('+' + i*5 + ' у.е.');
+        if (i >= 0) bomb.push('+' + i*5 + ' у.е.');
     }
 
     let relax = ['20 мин', '20 мин', '30 мин', '30 мин', '1 час'];
 
     // Массивы с наградами
     let arrayCommon = [];
+
+    let arrayBonus0 = [];
     let arrayBonus5 = [];
+    let arrayBonus10 = [];
+    let arrayBonus15 = [];
+    let arrayBonus20 = [];
+
     let arrayBonusX2 = [];
     let arrayUseful = [];
     let arraySocial = [];
@@ -577,38 +596,50 @@
 
     // Обновление массивов с наградами
     refreshArrays = () => {
-        arrayCommon = []; for (let i = 0; i < 40; i++) arrayCommon.push(common);
-        arrayBonus5 = []; for (let i = 0; i < 22; i++) arrayBonus5.push(bonus5);
+        arrayCommon = []; for (let i = 0; i < 40; i++) arrayCommon.push(common[Math.floor(Math.random()*common.length)]);
+
+        arrayBonus0 = []; for (let i = 0; i < 5; i++)  arrayBonus0.push(bonus0);
+        arrayBonus5 = []; for (let i = 0; i < 5; i++)  arrayBonus5.push(bonus5);
+        arrayBonus10 = []; for (let i = 0; i < 5; i++)  arrayBonus10.push(bonus10);
+        arrayBonus15 = []; for (let i = 0; i < 5; i++)  arrayBonus15.push(bonus15);
+        arrayBonus20 = []; for (let i = 0; i < 5; i++)  arrayBonus20.push(bonus20);
+
         arrayBonusX2 = []; for (let i = 0; i < 10; i++) arrayBonusX2.push(bonusX2);
         arrayUseful = []; for (let i = 0; i < 30; i++) arrayUseful.push(useful[Math.floor(Math.random()*useful.length)]);
         arraySocial = []; for (let i = 0; i < 1; i++) arraySocial.push(social[Math.floor(Math.random()*social.length)]);
-        arrayCheerful = []; for (let i = 0; i < 1; i++) arrayCheerful.push(cheerful[Math.floor(Math.random()*cheerful.length)]);
-        arrayBomb = []; for (let i = 0; i < 2; i++) arrayBomb.push(bomb[Math.floor(Math.random()*bomb.length)]);
+        arrayCheerful = []; for (let i = 0; i < 2; i++) arrayCheerful.push(cheerful[Math.floor(Math.random()*cheerful.length)]);
+        arrayBomb = []; arrayBomb = [...bomb];
         arrayRelax = []; for (let i = 0; i < 5; i++) arrayRelax.push(relax[Math.floor(Math.random()*relax.length)]);
     };
 
 
     // Получить награду
-    getSticker = () => {
-        document.getElementById('sticker').innerText = stickers[Math.floor(Math.random()*stickers.length)];
+    const getSticker = () => {
+        let temp = stickers[Math.floor(Math.random()*stickers.length)];
+
+        if (temp[0] === 'U') {
+            document.getElementById('sticker').style.background = 'var(--useful-background)';
+            temp = temp.slice(1);
+        }
+        if (temp[0] === 'S') {
+            document.getElementById('sticker').style.background = 'var(--social-background)';
+            temp = temp.slice(1);
+        }
+
+        if (temp[0] === 'C') {
+            document.getElementById('sticker').style.background = 'var(--cheerful-background)';
+            temp = temp.slice(1);
+        }
+
+        document.getElementById('sticker').innerText = temp;
         document.getElementById('sticker').style.color = 'white';
         if (document.getElementById('sticker').innerText === bonus5) document.getElementById('sticker').style.background = 'var(--bonus5-background)';
-        if (document.getElementById('sticker').innerText === common) document.getElementById('sticker').style.background = 'var(--common-background)';
+        common.forEach((item) => {
+            if (item === document.getElementById('sticker').innerText)
+                document.getElementById('sticker').style.background = 'var(--common-background)';
+        });
+
         if (document.getElementById('sticker').innerText === bonusX2) document.getElementById('sticker').style.background = 'var(--bonusX2-background)';
-        useful.forEach((item) => {
-            if (item === document.getElementById('sticker').innerText)
-                document.getElementById('sticker').style.background = 'var(--useful-background)';
-        });
-
-        social.forEach((item) => {
-            if (item === document.getElementById('sticker').innerText)
-                document.getElementById('sticker').style.background = 'var(--social-background)';
-        });
-
-        cheerful.forEach((item) => {
-            if (item === document.getElementById('sticker').innerText)
-                document.getElementById('sticker').style.background = 'var(--cheerful-background)';
-        });
 
         if (parseInt(document.getElementById('sticker').innerText) < 0)  document.getElementById('sticker').style.background = 'var(--bomb-background)';
         if (parseInt(document.getElementById('sticker').innerText) >= 0) document.getElementById('sticker').style.background = 'var(--bonus5-background)';
@@ -616,7 +647,7 @@
     };
 
     // Получить награду с загрузкой
-    getStickerWithLoading = () => {
+    const getStickerWithLoading = () => {
         let arrayButtons = ['dopamineСharge', 'main', 'minor', 'cortisol', 'bomb', 'maniac'];
         document.getElementById('sticker').innerHTML = '<div class="holder">\n' +
             '    <div class="flip-preloader example-1">\n' +
@@ -631,7 +662,8 @@
         arrayButtons.forEach((item) => { document.getElementById(item).disabled = true; });
         document.getElementById('sticker').style.background = 'white';
 
-        let timerId = setInterval(() => getSticker(), 4000);
+
+        let timerId = setInterval(() => getSticker(), 4005);
         setTimeout(() => {
             clearInterval(timerId);
             getSticker();
@@ -639,11 +671,12 @@
         }, 4000);
     };
 
+
     // Получить дофаминовую награду
-    getDopamineSticker = () => {
+   getDopamineSticker = () => {
         stickers = [];
         refreshArrays();
-        stickers = [...arrayBonus5, ...arrayUseful, ...arraySocial, ...arrayCheerful];
+        stickers = [...arrayBonus10, ...arrayBonus15, ...arrayBonus15, ...arrayBonus20, ...arrayUseful, ...arraySocial, ...arrayCheerful];
         getStickerWithLoading();
     };
 
@@ -651,7 +684,7 @@
     getMainSticker = () => {
         stickers = [];
         refreshArrays();
-        stickers = [...arrayBonus5, ...arrayUseful, ...arraySocial];
+        stickers = [...arrayBonus0, ...arrayBonus5, ...arrayBonus5, ...arrayBonus10, ...arrayUseful, ...arraySocial];
         getStickerWithLoading();
     };
 
@@ -659,7 +692,7 @@
     getMinorSticker = () => {
         stickers = [];
         refreshArrays();
-        stickers = [...arrayCommon, ...arrayBonus5, ...arrayBonusX2, ...arrayUseful, ...arraySocial, ...arrayCheerful, ...arrayRelax];
+        stickers = [...arrayCommon, ...arrayBonus0, ...arrayBonus5, ...arrayBonus5, ...arrayBonus10, ...arrayBonusX2, ...arrayUseful, ...arraySocial, ...arrayCheerful, ...arrayRelax];
         getStickerWithLoading();
     };
 
@@ -675,7 +708,8 @@
     getBombSticker = () => {
         stickers = [];
         refreshArrays();
-        stickers = [...arrayBomb];
+        stickers = [...arrayBomb, ...arrayBomb, ...arrayBomb, ...arrayBomb, ...arrayBomb, ...arrayBomb, ...arrayBomb, ...arrayCommon, ...arrayUseful, ...arrayRelax];
+        console.log(stickers);
         getStickerWithLoading();
     };
 
@@ -683,7 +717,7 @@
     getManiacSticker = () => {
         stickers = [];
         refreshArrays();
-        stickers = [...arrayBonus5, ...arrayUseful, ...arraySocial, ...arrayCheerful, ...arrayRelax];
+        stickers = [...arrayBonus5, ...arrayBonus5, ...arrayBonus10, ...arrayBonus10, ...arrayUseful, ...arraySocial, ...arrayCheerful, ...arrayRelax];
         getStickerWithLoading();
     };
 
