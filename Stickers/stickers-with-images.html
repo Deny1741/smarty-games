@@ -550,7 +550,7 @@
     let bonus10 = ['+10 у.е.'];
     let bonus15 = ['+15 у.е.'];
     let bonus20 = ['+20 у.е.'];
-    let bonusX2 = ['х2'];
+    let bonusX2 = ['x2'];
     let useful = []; for (let i = 1; i <= 15; i++) useful.push('U№' + i);
     let social = [];  for (let i = 1; i <= 6; i++) social.push('S№' + i);
     let cheerful = [];  for (let i = 1; i <= 10; i++) cheerful.push('C№' + i);
@@ -581,7 +581,7 @@
         if (temp[0] === 'U') { document.getElementById('sticker').style.background = 'var(--useful-background)'; temp = temp.slice(1); }
         if (temp[0] === 'S') { document.getElementById('sticker').style.background = 'var(--social-background)'; temp = temp.slice(1); }
         if (temp[0] === 'C') { document.getElementById('sticker').style.background = 'var(--cheerful-background)'; temp = temp.slice(1); }
-        if (temp === bonusX2) document.getElementById('sticker').style.background = 'var(--bonusX2-background)';
+        if (temp === bonusX2.toString()) document.getElementById('sticker').style.background = 'var(--bonusX2-background)';
         if (parseInt(temp) < 0)  document.getElementById('sticker').style.background = 'var(--bomb-background)';
         if (parseInt(temp) >= 0) document.getElementById('sticker').style.background = 'var(--bonus-background)';
         common.forEach((item) => { if (item === temp) document.getElementById('sticker').style.background = 'var(--common-background)'; });
