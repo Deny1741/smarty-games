@@ -561,7 +561,7 @@
 
     let stickers = [common, bonus0, bonus5, bonus10, bonus15, bonus20, bonusX2, useful, social, cheerful, minus5, minus10, minus15, relax];
     let rewards = [];
-    let coefficients = [];
+    let stickersAmount = [];
     let temp = '';
 
     let arrayButtons = ['dopamineСharge', 'main', 'minor', 'cortisol', 'bomb', 'maniac'];
@@ -569,8 +569,8 @@
     // Получить массив с наградами
     const getArrayRewards = () => {
         rewards = [];
-        for (let i = 0; i < coefficients.length; i++) {
-            for (let j = 0; j < coefficients[i]; j++) {
+        for (let i = 0; i < stickersAmount.length; i++) {
+            for (let j = 0; j < stickersAmount[i]; j++) {
                 rewards.push(stickers[i][Math.floor(Math.random()*stickers[i].length)]);
             }
         }
@@ -626,42 +626,42 @@
 
     // Получить дофаминовую награду
    getDopamineSticker = () => {
-        coefficients = [0, 0, 0, 10, 10, 10, 0, 63, 2, 4, 0, 0, 0, 0];
+        stickersAmount = [0, 0, 0, 5, 5, 5, 0, 30, 1, 2, 0, 0, 0, 0];
         getArrayRewards();
         getRewardWithLoading();
    };
 
     // Получить главную награду
     getMainSticker = () => {
-        coefficients = [0, 4, 11, 11, 0, 0, 0, 67, 2, 4, 0, 0, 0, 0];
+        stickersAmount = [0, 2, 5, 5, 0, 0, 0, 30, 1, 2, 0, 0, 0, 0];
         getArrayRewards();
         getRewardWithLoading();
     };
 
     // Получить награду за рутину
     getMinorSticker = () => {
-        coefficients = [40, 2, 5, 5, 0, 0, 10, 30, 1, 2, 0, 0, 0, 5];
+        stickersAmount = [40, 2, 5, 5, 0, 0, 10, 30, 1, 2, 0, 0, 0, 5];
         getArrayRewards();
         getRewardWithLoading();
     };
 
     // Получить кортизоловую награду
     getCortisolSticker = () => {
-        coefficients = [0, 0, 12, 0, 0, 0, 0, 73, 2, 0, 0, 0, 0, 12];
+        stickersAmount = [0, 0, 5, 0, 0, 0, 0, 30, 1, 0, 0, 0, 0, 5];
         getArrayRewards();
         getRewardWithLoading();
     };
 
     // Получить бомбу
     getBombSticker = () => {
-        coefficients = [42, 2, 5, 5, 5, 0, 0, 32, 0, 0, 1, 1, 1, 5];
+        stickersAmount = [40, 2, 5, 5, 5, 0, 0, 30, 0, 0, 1, 1, 1, 5];
         getArrayRewards();
         getRewardWithLoading();
     };
 
     // Получить награду дофаминовый маньяк
     getManiacSticker = () => {
-        coefficients = [0, 0, 10, 10, 0, 0, 0, 63, 2, 4, 0, 0, 0, 10];
+        stickersAmount = [0, 0, 5, 5, 0, 0, 0, 30, 1, 2, 0, 0, 0, 5];
         getArrayRewards();
         getRewardWithLoading();
     };
