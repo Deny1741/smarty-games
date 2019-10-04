@@ -10,7 +10,7 @@
 <style>
     :root {
         --common-background: #b0abab;
-        --bonus5-background: #73d94f;
+        --bonus-background: #73d94f;
         --bonusX2-background: #ff58e3;
         --useful-background: #008CBA;
         --social-background: #ab38ce;
@@ -583,7 +583,7 @@
         if (temp[0] === 'C') { document.getElementById('sticker').style.background = 'var(--cheerful-background)'; temp = temp.slice(1); }
         if (temp === bonusX2) document.getElementById('sticker').style.background = 'var(--bonusX2-background)';
         if (parseInt(temp) < 0)  document.getElementById('sticker').style.background = 'var(--bomb-background)';
-        if (parseInt(temp) >= 0) document.getElementById('sticker').style.background = 'var(--bonus5-background)';
+        if (parseInt(temp) >= 0) document.getElementById('sticker').style.background = 'var(--bonus-background)';
         common.forEach((item) => { if (item === temp) document.getElementById('sticker').style.background = 'var(--common-background)'; });
         relax.forEach((item) => { if (item === temp) document.getElementById('sticker').style.background = 'var(--relax-background)'; });
     };
@@ -654,7 +654,7 @@
 
     // Получить бомбу
     getBombSticker = () => {
-        coefficients = [37, 2, 5, 5, 5, 0, 0, 28, 0, 0, 5, 5, 5, 5];
+        coefficients = [42, 2, 5, 5, 5, 0, 0, 32, 0, 0, 1, 1, 1, 5];
         getArrayRewards();
         getRewardWithLoading();
     };
