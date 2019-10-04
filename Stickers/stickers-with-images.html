@@ -5,11 +5,10 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Наклейки</title>
+    <title>Дофаминовый поток</title>
 </head>
 <style>
     :root {
-
         --common-background: #b0abab;
         --bonus5-background: #73d94f;
         --bonusX2-background: #ff58e3;
@@ -26,8 +25,6 @@
             margin-bottom: 100px !important;
         }
 
-
-
         .button {
             width: 30% !important;
         }
@@ -38,10 +35,13 @@
         #sticker {
             margin-top: 50px !important;
             margin-bottom: 100px !important;
+            font-size: 56px !important;
         }
+
         .button {
             width: 45% !important;
         }
+
         .flip-preloader.example-1 {
             width: 300px !important;
         }
@@ -53,6 +53,7 @@
             margin-bottom: 100px !important;
             font-size: 48px !important;
         }
+
         h1 {
             font-size: 24px !important;
         }
@@ -65,10 +66,7 @@
 
     body {
         font-family: Helvetica, serif;
-     //   max-width: 1200px;
         margin: 0 auto;
-      //  padding-right: 5px;
-     //   padding-left: 5px;
         line-height: 1.5;
         font-size: 16px;
     }
@@ -84,14 +82,12 @@
         color: white;
        // background: #008CBA;
         background: #4CAF50;
-    }
-
-    ul {
-        list-style-type: none;
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
 
     #sticker {
-        display: block;
+        display: flex;
         align-items: center;
         justify-content: center;
         position: relative;
@@ -102,10 +98,6 @@
         margin-bottom: 150px;
         font-weight: bold;
         transition: 0.5s;
-    }
-
-    #sticker:first-letter {
-      //  opacity: 0;
     }
 
     .button-group {
@@ -553,102 +545,61 @@
 <script>
     // Вид награды
     let common = ['Я молодец!', 'Я мегакрут!'];
-
-    let bonus0 = '+0 у.е.';
-    let bonus5 = '+5 у.е.';
-    let bonus10 = '+10 у.е.';
-    let bonus15 = '+15 у.е.';
-    let bonus20 = '+20 у.е.';
-
-    let bonusX2 = 'х2';
-    let useful = [];
-    let social = [];
-    let cheerful = [];
-    let bomb = [];
-
-    for (let i = 1; i <= 15; i++) useful.push('U№' + i);
-    for (let i = 1; i <= 6; i++) social.push('S№' + i);
-    for (let i = 1; i <= 10; i++) cheerful.push('C№' + i);
-    for (let i = -3; i <= 3; i++) {
-        if (i < 0) bomb.push(i*5 + ' у.е.');
-        if (i >= 0) bomb.push('+' + i*5 + ' у.е.');
-    }
-
+    let bonus0 = ['+0 у.е.'];
+    let bonus5 = ['+5 у.е.'];
+    let bonus10 = ['+10 у.е.'];
+    let bonus15 = ['+15 у.е.'];
+    let bonus20 = ['+20 у.е.'];
+    let bonusX2 = ['х2'];
+    let useful = []; for (let i = 1; i <= 15; i++) useful.push('U№' + i);
+    let social = [];  for (let i = 1; i <= 6; i++) social.push('S№' + i);
+    let cheerful = [];  for (let i = 1; i <= 10; i++) cheerful.push('C№' + i);
+    let minus5 = ['-5 y.e.'];
+    let minus10 = ['-10 y.e.'];
+    let minus15 = ['-15 y.e.'];
     let relax = ['20 мин', '20 мин', '30 мин', '30 мин', '1 час'];
 
-    // Массивы с наградами
-    let arrayCommon = [];
+    let stickers = [common, bonus0, bonus5, bonus10, bonus15, bonus20, bonusX2, useful, social, cheerful, minus5, minus10, minus15, relax];
+    let rewards = [];
+    let coefficients = [];
+    let temp = '';
 
-    let arrayBonus0 = [];
-    let arrayBonus5 = [];
-    let arrayBonus10 = [];
-    let arrayBonus15 = [];
-    let arrayBonus20 = [];
+    let arrayButtons = ['dopamineСharge', 'main', 'minor', 'cortisol', 'bomb', 'maniac'];
 
-    let arrayBonusX2 = [];
-    let arrayUseful = [];
-    let arraySocial = [];
-    let arrayCheerful = [];
-    let arrayBomb = [];
-    let arrayRelax = [];
-
-    let stickers = [];
-
-    // Обновление массивов с наградами
-    refreshArrays = () => {
-        arrayCommon = []; for (let i = 0; i < 40; i++) arrayCommon.push(common[Math.floor(Math.random()*common.length)]);
-
-        arrayBonus0 = []; for (let i = 0; i < 5; i++)  arrayBonus0.push(bonus0);
-        arrayBonus5 = []; for (let i = 0; i < 5; i++)  arrayBonus5.push(bonus5);
-        arrayBonus10 = []; for (let i = 0; i < 5; i++)  arrayBonus10.push(bonus10);
-        arrayBonus15 = []; for (let i = 0; i < 5; i++)  arrayBonus15.push(bonus15);
-        arrayBonus20 = []; for (let i = 0; i < 5; i++)  arrayBonus20.push(bonus20);
-
-        arrayBonusX2 = []; for (let i = 0; i < 10; i++) arrayBonusX2.push(bonusX2);
-        arrayUseful = []; for (let i = 0; i < 30; i++) arrayUseful.push(useful[Math.floor(Math.random()*useful.length)]);
-        arraySocial = []; for (let i = 0; i < 1; i++) arraySocial.push(social[Math.floor(Math.random()*social.length)]);
-        arrayCheerful = []; for (let i = 0; i < 2; i++) arrayCheerful.push(cheerful[Math.floor(Math.random()*cheerful.length)]);
-        arrayBomb = []; arrayBomb = [...bomb];
-        arrayRelax = []; for (let i = 0; i < 5; i++) arrayRelax.push(relax[Math.floor(Math.random()*relax.length)]);
+    // Получить массив с наградами
+    const getArrayRewards = () => {
+        rewards = [];
+        for (let i = 0; i < coefficients.length; i++) {
+            for (let j = 0; j < coefficients[i]; j++) {
+                rewards.push(stickers[i][Math.floor(Math.random()*stickers[i].length)]);
+            }
+        }
     };
 
+    // изменить цвет награды
+    const changeBackgroundReward = () => {
+        if (temp[0] === 'U') { document.getElementById('sticker').style.background = 'var(--useful-background)'; temp = temp.slice(1); }
+        if (temp[0] === 'S') { document.getElementById('sticker').style.background = 'var(--social-background)'; temp = temp.slice(1); }
+        if (temp[0] === 'C') { document.getElementById('sticker').style.background = 'var(--cheerful-background)'; temp = temp.slice(1); }
+        if (temp === bonusX2) document.getElementById('sticker').style.background = 'var(--bonusX2-background)';
+        if (parseInt(temp) < 0)  document.getElementById('sticker').style.background = 'var(--bomb-background)';
+        if (parseInt(temp) >= 0) document.getElementById('sticker').style.background = 'var(--bonus5-background)';
+        common.forEach((item) => { if (item === temp) document.getElementById('sticker').style.background = 'var(--common-background)'; });
+        relax.forEach((item) => { if (item === temp) document.getElementById('sticker').style.background = 'var(--relax-background)'; });
+    };
 
-    // Получить награду
-    const getSticker = () => {
-        let temp = stickers[Math.floor(Math.random()*stickers.length)];
-
-        if (temp[0] === 'U') {
-            document.getElementById('sticker').style.background = 'var(--useful-background)';
-            temp = temp.slice(1);
-        }
-        if (temp[0] === 'S') {
-            document.getElementById('sticker').style.background = 'var(--social-background)';
-            temp = temp.slice(1);
-        }
-
-        if (temp[0] === 'C') {
-            document.getElementById('sticker').style.background = 'var(--cheerful-background)';
-            temp = temp.slice(1);
-        }
-
+    // Получить награду (надо подумать)
+    const getReward = () => {
+        temp = rewards[Math.floor(Math.random()*rewards.length)];
+        changeBackgroundReward();
         document.getElementById('sticker').innerText = temp;
-        document.getElementById('sticker').style.color = 'white';
-        if (document.getElementById('sticker').innerText === bonus5) document.getElementById('sticker').style.background = 'var(--bonus5-background)';
-        common.forEach((item) => {
-            if (item === document.getElementById('sticker').innerText)
-                document.getElementById('sticker').style.background = 'var(--common-background)';
-        });
-
-        if (document.getElementById('sticker').innerText === bonusX2) document.getElementById('sticker').style.background = 'var(--bonusX2-background)';
-
-        if (parseInt(document.getElementById('sticker').innerText) < 0)  document.getElementById('sticker').style.background = 'var(--bomb-background)';
-        if (parseInt(document.getElementById('sticker').innerText) >= 0) document.getElementById('sticker').style.background = 'var(--bonus5-background)';
-        if (document.getElementById('sticker').innerText === relax) document.getElementById('sticker').style.background = 'var(--relax-background)';
     };
 
     // Получить награду с загрузкой
-    const getStickerWithLoading = () => {
-        let arrayButtons = ['dopamineСharge', 'main', 'minor', 'cortisol', 'bomb', 'maniac'];
+    const getRewardWithLoading = () => {
+        document.getElementById('sticker').style.color = 'white';
+        document.getElementById('sticker').style.background = 'white';
+
         document.getElementById('sticker').innerHTML = '<div class="holder">\n' +
             '    <div class="flip-preloader example-1">\n' +
             '        <div></div>\n' +
@@ -660,64 +611,59 @@
             '</div>';
 
         arrayButtons.forEach((item) => { document.getElementById(item).disabled = true; });
-        document.getElementById('sticker').style.background = 'white';
 
 
-        let timerId = setInterval(() => getSticker(), 4005);
+        let timerId = setInterval(() => getReward(), 4005);
         setTimeout(() => {
             clearInterval(timerId);
-            getSticker();
-            arrayButtons.forEach((item) => { document.getElementById(item).disabled = false; });
+            getReward();
+            arrayButtons.forEach((item) => {
+                document.getElementById(item).disabled = false;
+            });
         }, 4000);
     };
 
 
     // Получить дофаминовую награду
    getDopamineSticker = () => {
-        stickers = [];
-        refreshArrays();
-        stickers = [...arrayBonus10, ...arrayBonus15, ...arrayBonus15, ...arrayBonus20, ...arrayUseful, ...arraySocial, ...arrayCheerful];
-        getStickerWithLoading();
-    };
+        coefficients = [0, 0, 0, 10, 10, 10, 0, 63, 2, 4, 0, 0, 0, 0];
+        getArrayRewards();
+        getRewardWithLoading();
+   };
 
     // Получить главную награду
     getMainSticker = () => {
-        stickers = [];
-        refreshArrays();
-        stickers = [...arrayBonus0, ...arrayBonus5, ...arrayBonus5, ...arrayBonus10, ...arrayUseful, ...arraySocial];
-        getStickerWithLoading();
+        coefficients = [0, 4, 11, 11, 0, 0, 0, 67, 2, 4, 0, 0, 0, 0];
+        getArrayRewards();
+        getRewardWithLoading();
     };
 
     // Получить награду за рутину
     getMinorSticker = () => {
-        stickers = [];
-        refreshArrays();
-        stickers = [...arrayCommon, ...arrayBonus0, ...arrayBonus5, ...arrayBonus5, ...arrayBonus10, ...arrayBonusX2, ...arrayUseful, ...arraySocial, ...arrayCheerful, ...arrayRelax];
-        getStickerWithLoading();
+        coefficients = [40, 2, 5, 5, 0, 0, 10, 30, 1, 2, 0, 0, 0, 5];
+        getArrayRewards();
+        getRewardWithLoading();
     };
 
     // Получить кортизоловую награду
     getCortisolSticker = () => {
-        stickers = [];
-        refreshArrays();
-        stickers = [...arrayBonus5, ...arrayUseful, ...arrayCheerful];
-        getStickerWithLoading();
+        coefficients = [0, 0, 12, 0, 0, 0, 0, 73, 2, 0, 0, 0, 0, 12];
+        getArrayRewards();
+        getRewardWithLoading();
     };
 
     // Получить бомбу
     getBombSticker = () => {
-        stickers = [];
-        refreshArrays();
-        stickers = [...arrayBomb, ...arrayBomb, ...arrayBomb, ...arrayBomb, ...arrayBomb, ...arrayBomb, ...arrayBomb, ...arrayCommon, ...arrayUseful, ...arrayRelax];
-        getStickerWithLoading();
+        coefficients = [37, 2, 5, 5, 5, 0, 0, 28, 0, 0, 5, 5, 5, 5];
+        getArrayRewards();
+        getRewardWithLoading();
     };
 
     // Получить награду дофаминовый маньяк
     getManiacSticker = () => {
-        stickers = [];
-        refreshArrays();
-        stickers = [...arrayBonus5, ...arrayBonus5, ...arrayBonus10, ...arrayBonus10, ...arrayUseful, ...arraySocial, ...arrayCheerful, ...arrayRelax];
-        getStickerWithLoading();
+        coefficients = [0, 0, 10, 10, 0, 0, 0, 63, 2, 4, 0, 0, 0, 10];
+        getArrayRewards();
+        getRewardWithLoading();
     };
 
     // Привязка функций к кнопкам
