@@ -171,12 +171,6 @@
         width: 400px;
     }
 
-    .flip-preloader.example-2 {
-        top: 75%;
-        height: 30px;
-        width: 200px;
-    }
-
     .flip-preloader div {
         position: absolute;
         width: 20%;
@@ -531,75 +525,94 @@
 <h1>Дофаминовый поток</h1>
 
 <div class="wrap">
-<div id="sticker" class="sticker">Нажмите на&nbspкнопку</div>
-<div id="buttons" class="button-group">
-    <button id="dopamineСharge" class="button"><img src="image-stickers/dofamine.png" height="70" alt=""></button>
-    <button id="main" class="button"><img src="image-stickers/main.png" height="70" alt=""></button>
-    <button id="minor" class="button "><img src="image-stickers/minor.png" height="70" alt=""></button>
-    <button id="cortisol" class="button"><img src="image-stickers/cortisol.png" height="70" alt=""></button>
-    <button id="bomb" class="button"><img src="image-stickers/bomb.png" height="70" alt=""></button>
-    <button id="maniac" class="button"><img src="image-stickers/maniac.png" height="70" alt=""></button>
-</div>
+    <div id="sticker" class="sticker">Нажмите на&nbspкнопку</div>
+    <div class="button-group">
+        <button id="dopamineСharge" class="button"><img src="image-stickers/dopamine.png" height="70" alt=""></button>
+        <button id="main" class="button"><img src="image-stickers/main.png" height="70" alt=""></button>
+        <button id="minor" class="button "><img src="image-stickers/minor.png" height="70" alt=""></button>
+        <button id="cortisol" class="button"><img src="image-stickers/cortisol.png" height="70" alt=""></button>
+        <button id="bomb" class="button"><img src="image-stickers/bomb.png" height="70" alt=""></button>
+        <button id="maniac" class="button"><img src="image-stickers/maniac.png" height="70" alt=""></button>
+    </div>
 </div>
 </body>
 <script>
-    // Вид награды
-    let common = ['Я молодец!', 'Я мегакрут!'];
-    let bonus0 = ['+0 у.е.'];
-    let bonus5 = ['+5 у.е.'];
-    let bonus10 = ['+10 у.е.'];
-    let bonus15 = ['+15 у.е.'];
-    let bonus20 = ['+20 у.е.'];
-    let bonusX2 = ['x2'];
-    let useful = []; for (let i = 1; i <= 15; i++) useful.push('U№' + i);
-    let social = [];  for (let i = 1; i <= 6; i++) social.push('S№' + i);
-    let cheerful = [];  for (let i = 1; i <= 10; i++) cheerful.push('C№' + i);
-    let minus5 = ['-5 y.e.'];
-    let minus10 = ['-10 y.e.'];
-    let minus15 = ['-15 y.e.'];
-    let relax = ['20 мин', '20 мин', '30 мин', '30 мин', '1 час'];
+    // Конструктор
+    const sticker = (name, amount) => {
+        return {
+            name: name,
+            amount: amount,
+        };
+    };
+
+    // Награды
+    let common = sticker(['Я молодец!', 'Я мегакрут!'], 40);
+    let bonus0  = sticker(['+0 у.е.'], 2);
+    let bonus5 = sticker(['+5 у.е.'], 5);
+    let bonus10 = sticker(['+10 у.е.'], 5);
+    let bonus15 = sticker(['+15 у.е.'], 5);
+    let bonus20 = sticker(['+20 у.е.'], 4);
+    let bonusX2 = sticker(['x2'], 10);
+    let useful = sticker([], 30); for (let i = 1; i <= 15; i++) useful.name.push('U№' + i);
+    let social = sticker([], 1); for (let i = 1; i <= 6; i++) social.name.push('S№' + i);
+    let cheerful = sticker([], 2); for (let i = 1; i <= 10; i++) cheerful.name.push('C№' + i);
+    let minus5 = sticker(['-5 y.e.'], 1);
+    let minus10 = sticker(['-10 y.e.'], 1);
+    let minus15 = sticker(['-15 y.e.'], 1);
+    let relax = sticker(['20 мин', '20 мин', '30 мин', '30 мин', '1 час'], 5);
+
+    // Переключатели
+    let toggles = {
+        dopamine: [0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0],
+        main: [0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+        minor: [1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1],
+        cortisol: [0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1],
+        bomb: [1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1],
+        maniac: [0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1],
+    };
 
     let stickers = [common, bonus0, bonus5, bonus10, bonus15, bonus20, bonusX2, useful, social, cheerful, minus5, minus10, minus15, relax];
     let rewards = [];
-    let stickersAmount = [];
     let temp = '';
 
     let arrayButtons = ['dopamineСharge', 'main', 'minor', 'cortisol', 'bomb', 'maniac'];
 
     // Получить массив с наградами
-    const getArrayRewards = () => {
+    const getArrayRewards = (stickersToggle) => {
         rewards = [];
-        for (let i = 0; i < stickersAmount.length; i++) {
-            for (let j = 0; j < stickersAmount[i]; j++) {
-                rewards.push(stickers[i][Math.floor(Math.random()*stickers[i].length)]);
+        for (let i = 0; i < stickers.length; i++) {
+            if (stickersToggle[i] === 1) {
+                for (let j = 0; j < stickers[i].amount; j++) {
+                    rewards.push(stickers[i].name[Math.floor(Math.random()*stickers[i].name.length)]);
+                }
             }
         }
+        // console.log(rewards);
     };
 
     // изменить цвет награды
     const changeBackgroundReward = () => {
+        document.getElementById('sticker').style.color = 'white';
         if (temp[0] === 'U') { document.getElementById('sticker').style.background = 'var(--useful-background)'; temp = temp.slice(1); }
         if (temp[0] === 'S') { document.getElementById('sticker').style.background = 'var(--social-background)'; temp = temp.slice(1); }
         if (temp[0] === 'C') { document.getElementById('sticker').style.background = 'var(--cheerful-background)'; temp = temp.slice(1); }
         if (temp === bonusX2.toString()) document.getElementById('sticker').style.background = 'var(--bonusX2-background)';
         if (parseInt(temp) < 0)  document.getElementById('sticker').style.background = 'var(--bomb-background)';
         if (parseInt(temp) >= 0) document.getElementById('sticker').style.background = 'var(--bonus-background)';
-        common.forEach((item) => { if (item === temp) document.getElementById('sticker').style.background = 'var(--common-background)'; });
-        relax.forEach((item) => { if (item === temp) document.getElementById('sticker').style.background = 'var(--relax-background)'; });
+        common.name.forEach((item) => { if (item === temp) document.getElementById('sticker').style.background = 'var(--common-background)'; });
+        relax.name.forEach((item) => { if (item === temp) document.getElementById('sticker').style.background = 'var(--relax-background)'; });
     };
 
     // Получить награду (надо подумать)
-    const getReward = () => {
+    const getReward = (stickersToggle) => {
+        getArrayRewards(stickersToggle);
         temp = rewards[Math.floor(Math.random()*rewards.length)];
         changeBackgroundReward();
         document.getElementById('sticker').innerText = temp;
     };
 
-    // Получить награду с загрузкой
-    const getRewardWithLoading = () => {
-        document.getElementById('sticker').style.color = 'white';
-        document.getElementById('sticker').style.background = 'white';
-
+    // Анимация загрузки
+    const preloader = () => {
         document.getElementById('sticker').innerHTML = '<div class="holder">\n' +
             '    <div class="flip-preloader example-1">\n' +
             '        <div></div>\n' +
@@ -609,69 +622,32 @@
             '        <div></div>\n' +
             '    </div>\n' +
             '</div>';
+    };
+
+    // Получить награду с загрузкой
+    const getRewardWithLoading = (stickersToggle) => {
+        document.getElementById('sticker').style.background = 'white';
+
+        preloader();
 
         arrayButtons.forEach((item) => { document.getElementById(item).disabled = true; });
-
-
+        
         let timerId = setInterval(() => getReward(), 4005);
         setTimeout(() => {
             clearInterval(timerId);
-            getReward();
+            getReward(stickersToggle);
             arrayButtons.forEach((item) => {
                 document.getElementById(item).disabled = false;
             });
         }, 4000);
     };
 
-
-    // Получить дофаминовую награду
-   getDopamineSticker = () => {
-        stickersAmount = [0, 0, 0, 5, 5, 5, 0, 30, 1, 2, 0, 0, 0, 0];
-        getArrayRewards();
-        getRewardWithLoading();
-   };
-
-    // Получить главную награду
-    getMainSticker = () => {
-        stickersAmount = [0, 2, 5, 5, 0, 0, 0, 30, 1, 2, 0, 0, 0, 0];
-        getArrayRewards();
-        getRewardWithLoading();
-    };
-
-    // Получить награду за рутину
-    getMinorSticker = () => {
-        stickersAmount = [40, 2, 5, 5, 0, 0, 10, 30, 1, 2, 0, 0, 0, 5];
-        getArrayRewards();
-        getRewardWithLoading();
-    };
-
-    // Получить кортизоловую награду
-    getCortisolSticker = () => {
-        stickersAmount = [0, 0, 5, 0, 0, 0, 0, 30, 1, 0, 0, 0, 0, 5];
-        getArrayRewards();
-        getRewardWithLoading();
-    };
-
-    // Получить бомбу
-    getBombSticker = () => {
-        stickersAmount = [40, 2, 5, 5, 5, 0, 0, 30, 0, 0, 1, 1, 1, 5];
-        getArrayRewards();
-        getRewardWithLoading();
-    };
-
-    // Получить награду дофаминовый маньяк
-    getManiacSticker = () => {
-        stickersAmount = [0, 0, 5, 5, 0, 0, 0, 30, 1, 2, 0, 0, 0, 5];
-        getArrayRewards();
-        getRewardWithLoading();
-    };
-
     // Привязка функций к кнопкам
-    document.getElementById('dopamineСharge').onclick = () => getDopamineSticker();
-    document.getElementById('main').onclick = () => getMainSticker();
-    document.getElementById('minor').onclick = () => getMinorSticker();
-    document.getElementById('cortisol').onclick = () => getCortisolSticker();
-    document.getElementById('bomb').onclick = () => getBombSticker();
-    document.getElementById('maniac').onclick = () => getManiacSticker();
+    document.getElementById('dopamineСharge').onclick = () => getRewardWithLoading(toggles.dopamine);
+    document.getElementById('main').onclick = () => getRewardWithLoading(toggles.main);
+    document.getElementById('minor').onclick = () => getRewardWithLoading(toggles.minor);
+    document.getElementById('cortisol').onclick = () => getRewardWithLoading(toggles.cortisol);
+    document.getElementById('bomb').onclick = () => getRewardWithLoading(toggles.bomb);
+    document.getElementById('maniac').onclick = () => getRewardWithLoading(toggles.maniac);
 </script>
 </html>
