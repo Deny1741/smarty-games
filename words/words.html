@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Практика</title>
 
     <!-- Latest Sortable -->
     <script src="http://SortableJS.github.io/Sortable/Sortable.js"></script>
@@ -33,6 +33,56 @@
     h1 {
         text-align: center;
     }
+
+    ul {
+        margin-top: 20px;
+    }
+
+    li {
+        width: 100%;
+        text-align: center;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        cursor: move;
+        list-style: none;
+        margin: 5px 0 5px 0;
+        padding: 5px 0 5px 0;
+        background: #008CBA;
+    }
+
+    /*  ***************** */
+
+    .settings ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        list-style-type: none;
+    }
+
+    .settings-item {
+        width: calc(100%);
+        text-align: center;
+        margin: 5px;
+        font-weight: bold;
+    }
+
+    .settings label {
+        display: block;
+        font-size: 1rem;
+    }
+
+    .settings-item input {
+        display: block;
+        border: 2px solid cornflowerblue;
+        text-align: center;
+        border-radius: 3px;
+        font-size: 1rem;
+        font-weight: bold;
+        width: 100%;
+    }
+
+    /* ================= */
 
     ul {
         margin-top: 20px;
@@ -100,6 +150,23 @@
 <body>
 
 <div class="wrap">
+    <div class="settings">
+        <ul>
+            <li class="settings-item">
+                <label for="cells-select">
+                    Кол-во слов:
+                </label>
+                <select id="cells-select">
+                    <option id="option5" value="5">5</option>
+                    <option id="option10" value="10">10</option>
+                    <option id="option15" value="15">15</option>
+                    <option id="option20" value="20">20</option>
+                    <option id="option25" value="25">25</option>
+                </select>
+            </li>
+        </ul>
+    </div>
+
     <h1 id="text">Нажмите "Новая игра"</h1>
     <ul id="simpleListOne"></ul>
     <div class="button-group">
@@ -182,23 +249,37 @@
         'распределение', 'конституция', 'таблица', 'поэзия', 'термин', 'прибыль', 'стандарт', 'восторг', 'гибель', 'изделие', 'темп', 'вооружение', 'осуществление', 'уход', 'чемпионат',
         'молитва', 'контракт', 'философия', 'горло', 'оборот', 'кость', 'ведомство', 'преимущество', 'мина', 'полномочие'];
 
-    let wordCount = 10;
+    let wordCount = 5;
     let arr = [];
+    /*
     for (let i = 1; i <= wordCount; i++) {
         arr.push(i.toString());
     }
+    */
     let arrMix = [];
     let arrState = [];
 
 
 
-    for (let i = 0; i < wordCount; i++) {
-        document.getElementById('simpleListOne').innerHTML += '<li id="elem1" class="list-group-item"></li>';
-        document.getElementById('elem1').innerText = arr[i];
-        document.getElementById('elem1').id = i.toString();
-    }
+    window.onload = () => {
+        /*
+       for (let i = 1; i <= 25; i ++) {
+          document.getElementById('cells-select').innerHTML+='<option id="select"></option>';
+           document.getElementById('select').id = i.toString();
+           document.getElementById(i.toString()).value = i.toString();
+           document.getElementById(i.toString()).innerText = i.toString();
+           //  document.getElementById((i+3).toString()).innerText = (i+3).toString() + 'x' + (i+3).toString();
+       }
 
+         */
 
+        for (let i = 0; i < wordCount; i++) {
+            document.getElementById('simpleListOne').innerHTML += '<li id="elem1" class="list-group-item"></li>';
+            document.getElementById('elem1').innerText = arr[i];
+            document.getElementById('elem1').id = i.toString();
+        }
+        newGame();
+    };
 
     function func(a, b) {
         return 0.5 - Math.random();
@@ -210,7 +291,7 @@
         arrMix = document.getElementById('simpleListOne').innerHTML.split('</li>');
         arrMix.forEach((item, i) => { if (item === "") arrMix.splice(i, 1); });
         arrMix.sort(func);
-        console.log(arrMix);
+      //  console.log(arrMix);
         document.getElementById('simpleListOne').innerHTML = "";
         for (let i = 0; i < wordCount; i++) {
             document.getElementById('simpleListOne').innerHTML += arrMix[i] + '\n';
@@ -232,7 +313,7 @@
            arr.push(temp[i].slice());
        }
 
-       console.log(temp);
+     //  console.log(temp);
        console.log(arr);
 
        for (let i = 0; i < wordCount; i++) {
@@ -245,33 +326,39 @@
 
     };
 
-
-
-
-    Sortable.onUpdate;
-
     updateColor = () => {
+
         arrState = document.getElementById('simpleListOne').innerText.split('\n');
+        let count = 0;
         for (let i = 0; i < wordCount; i++) {
-            if (arr[i] === arrState[i].toString()) document.getElementById(i.toString()).style.background = '#4CAF50';
+            if (arr[i] === arrState[i]) {
+                document.getElementById(i.toString()).style.background = '#4CAF50';
+                count++;
+            }
             else document.getElementById(i.toString()).style.background = '#ff3366';
         }
 
-        let count = 0;
-        for (let i = 0; i < wordCount; i++) {
-            if (arr[i] === arrState[i]) count++;
-        }
-        if (count === arr.length) document.getElementById('text').innerText = 'ПРАВИЛЬНО!';
-    };
 
+        if (count === arr.length) {
+            document.getElementById('text').innerText = 'ПРАВИЛЬНО!';
+        }
+    };
 
     Sortable.create(simpleListOne, {
         onUpdate: () => {
-           updateColor();
+            updateColor();
         }
     });
+    Sortable.onUpdate;
 
     document.getElementById('button').onclick = () => mix();
     document.getElementById('newGame').onclick = () => newGame();
+
+
+    // Выбор сложности
+    document.getElementById('cells-select').onchange = () =>  {
+        wordCount = document.getElementById('cells-select').selectedOptions.item(0).value;
+        newGame();
+    }
 </script>
 </html>
