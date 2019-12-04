@@ -88,6 +88,7 @@
     <div id="rightCounter">Правильно: 0</div>
     <div id="word" class=""></div>
     <input type="text" id="input" placeholder="Введите ответ!">
+    <button id="answer" class="green">ответить</button>
     <button id="start">Загадать</button>
 </div>
 
@@ -144,6 +145,7 @@
 
     document.getElementById('start').onclick = () => start();
     document.getElementById('input').onchange = () => check();
+    document.getElementById('answer').onclick= () => check();
 
 
 
