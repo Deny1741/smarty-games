@@ -9,8 +9,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="./css/nav.css">
     <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/checkbox.css">
 
-    <title>День 3</title>
+    <title>Практика</title>
 </head>
 
 <style>
@@ -109,13 +110,45 @@
 </style>
 
 <body>
+<ul class="nav">
+    <li class="nav-item width100 active"><a href="practice.html" class="nav-link" >Практика</a></li>
+</ul>
 
 <ul class="nav">
-    <li class="nav-item"><a href="./theory/theory-1.html" class="nav-link" >День 1</a></li>
-    <li class="nav-item active"><a href="./practice.html" class="nav-link" >Практика</a></li>
-</ul>
-<div class="practice-wrap">
+    <li>
+        <div class="nav-item"><a href="./theory/theory-1.html" class="nav-link" >День 1</a></div>
+        <div class="checkBox"><input class="option-input" type="checkbox" id="day1" value="1"/></div>
+    </li>
 
+    <li>
+        <div class="nav-item not-ready"><a class="nav-link" >День 2</a></div>
+        <div class="checkBox"><input class="option-input" type="checkbox" id="day2" value="2"/></div>
+    </li>
+
+    <li>
+        <div class="nav-item not-ready"><a class="nav-link" >День 3</a></div>
+    </li>
+
+    <li>
+        <div class="nav-item not-ready"><a class="nav-link" >День 4</a></div>
+    </li>
+
+    <li>
+        <div class="nav-item not-ready"><a class="nav-link" >День 5</a></div>
+    </li>
+
+    <li>
+        <div class="nav-item not-ready"><a class="nav-link" >День 6</a></div>
+    </li>
+
+    <li>
+        <div class="nav-item not-ready"><a class="nav-link" >День 7</a></div>
+    </li>
+
+</ul>
+
+
+<div class="practice-wrap">
     <div id="rightCounter"></div>
     <div id="word" class=""></div>
     <input type="text" id="input" placeholder="Введите ответ!">
@@ -127,13 +160,20 @@
 </body>
 
 <script type="module">
-    import { wordsRus, wordsEng } from "./js/words/words-1.js";
+    import { wordsRus1, wordsEng1 } from "./js/words/words-1.js";
+    import { wordsRus2, wordsEng2 } from "./js/words/words-2.js";
+
+    let wordsRus = [];
+    let wordsEng = [];
 
     let wordIndex = '';
     let counter = '';
 
     window.onload = () => {
         document.getElementById('word').innerText = "Нажмите 'Загадать'";
+        document.getElementById('day1').checked = true;
+        wordsRus = [...wordsRus, ...wordsRus1];
+        wordsEng = [...wordsEng, ...wordsEng1];
         document.getElementById('rightCounter').innerText = "Осталось: " + wordsRus.length;
     };
 
@@ -168,6 +208,9 @@
             document.getElementById('input').disabled = true;
             document.getElementById('answer').disabled = true;
             document.getElementById('start').disabled = true;
+
+            document.getElementById('day1').checked = false;
+            document.getElementById('day2').checked = false;
         }
     };
 
@@ -175,6 +218,46 @@
     document.getElementById('input').onchange = () => check();
     document.getElementById('answer').onclick= () => check();
 
+
+    const useWords = (e) => {
+        if (document.getElementById(e.target.id).checked === true) {
+            if (e.target.id === 'day1') {
+                wordsRus = [...wordsRus, ...wordsRus1];
+                wordsEng = [...wordsEng, ...wordsEng1];
+            }
+            if (e.target.id === 'day2') {
+                wordsRus = [...wordsRus, ...wordsRus2];
+                wordsEng = [...wordsEng, ...wordsEng2];
+            }
+        }
+
+        if (document.getElementById(e.target.id).checked === false) {
+                if (e.target.id === 'day1') {
+                    for (let i = 0; i < wordsRus1.length; i++) {
+                        wordsRus = wordsRus.filter(item => item !== wordsRus1[i]);
+                        wordsEng = wordsEng.filter(item => item !== wordsEng1[i]);
+                    }
+                }
+
+                if (e.target.id === 'day2') {
+                    for (let i = 0; i < wordsRus2.length; i++) {
+                        wordsRus = wordsRus.filter(item => item !== wordsRus2[i]);
+                        wordsEng = wordsEng.filter(item => item !== wordsEng2[i]);
+                    }
+                }
+
+        }
+        console.log(wordsEng);
+
+
+        document.getElementById('rightCounter').innerText = "Осталось: " + wordsRus.length;
+        document.getElementById('input').disabled = false;
+        document.getElementById('answer').disabled = false;
+        document.getElementById('start').disabled = false;
+    };
+
+    document.getElementById('day1').onclick = (e) => useWords(e);
+    document.getElementById('day2').onclick = (e) => useWords(e);
 
 </script>
 </html>

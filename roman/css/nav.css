@@ -7,7 +7,7 @@
 }
 
 .nav-item {
-    width: calc(13%);
+    width: calc(100px);
     border: 2px solid white;
     border-radius: 10px !important;
     background-color: var(--nav-link-color);
@@ -18,7 +18,6 @@
 
 .nav-item:hover  {
     background-color: var(--nav-link-color-hover);
-
 }
 
 .nav-link {
@@ -36,4 +35,16 @@
 
 .active {
     background-color: var(--nav-link-color-hover);
+}
+
+.width100 {
+    width: 800px;
+}
+
+.not-ready {
+    background-color: #cccccc;
+}
+
+.not-ready:hover {
+    background-color: #cccccc;
 }
