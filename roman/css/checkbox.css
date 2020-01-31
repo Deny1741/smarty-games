@@ -37,7 +37,7 @@
     background: var(--nav-link-color);;
     opacity: 0.5;
     border: none;
-    color: #fff;
+    color: white;
     cursor: pointer;
     display: inline-block;
     margin-right: 0.5rem;
@@ -51,9 +51,13 @@
 }
 .option-input:checked {
     background: var(--nav-link-color);;
-    color: white;
+  //  color: white;
     opacity: 1;
 }
+
+.option-input::-webkit-input-placeholder { color: red; }
+
+
 .option-input:checked::before {
     height: 40px;
     width: 40px;

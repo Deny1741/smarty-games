@@ -45,8 +45,8 @@
     </ul>
 
     <ul class="nav">
-        <li class="nav-item active"><a href="day-1.html" class="nav-link" >День 1</a></li>
-        <li class="nav-item"><a href="day-2.html" class="nav-link">День 2</a></li>
+        <li class="nav-item"><a href="day-1.html" class="nav-link" >День 1</a></li>
+        <li class="nav-item active"><a href="day-2.html" class="nav-link">День 2</a></li>
         <li class="nav-item not-ready"><a class="nav-link" >День 3</a></li>
         <li class="nav-item not-ready"><a class="nav-link" >День 4</a></li>
         <li class="nav-item not-ready"><a class="nav-link" >День 5</a></li>
@@ -55,7 +55,7 @@
     </ul>
 
 </nav>
-<h1>Занятие №1</h1>
+<h1>Занятие №2</h1>
 
 <div class="wrap">
     <div class="words">
@@ -69,11 +69,11 @@
 
 </body>
 <script type="module">
-    import { wordsRus1, wordsEng1 } from "../js/words/words-1.js";
+    import { wordsRus2, wordsEng2 } from "../js/words/words-2.js";
 
-    for (let i = 0; i < wordsRus1.length; i++) {
-        document.getElementById('rus').innerHTML += '<li>' + wordsRus1[i] + '</li>';
-        document.getElementById('eng').innerHTML += '<li id="item">' + wordsEng1[i] + '</li>';
+    for (let i = 0; i < wordsRus2.length; i++) {
+        document.getElementById('rus').innerHTML += '<li>' + wordsRus2[i] + '</li>';
+        document.getElementById('eng').innerHTML += '<li id="item">' + wordsEng2[i] + '</li>';
         document.getElementById('item').id = i.toString();
     }
 
