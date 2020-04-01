@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+            crossorigin="anonymous"></script>
+    <script
+            src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+            integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+            crossorigin="anonymous"></script>
+    <title>Ментальная арифметика</title>
+</head>
+
+<style>
+    #menar {
+        display: none;
+        margin-top: 5px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    :root {
+        --green: #4CAF50;
+        --blue: #008CBA;
+        --red: #ff3366;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: Helvetica, serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-right: 5px;
+        padding-left: 5px;
+        line-height: 1.5;
+        font-size: 16px;
+    }
+
+    ul {
+        list-style-type: none;
+    }
+
+    @media screen and (max-width: 680px) {
+        .settings-item, .button, .button-group div{
+            width: 100% !important;
+        }
+    }
+
+    @media screen and (max-width: 500px) {
+        .settings-item, .button, .button-group div {
+            width: 100% !important;
+        }
+        .mobile-count {
+            width: calc(33% - 10px) !important;
+
+        }
+
+        .button-group {
+            margin-bottom: 10px !important;
+        }
+
+        #bomb {
+            margin-bottom: 20px !important;
+        }
+
+        .wrap-sky, .wrap-earth {
+            width: 280px !important;
+            padding-right: 30px !important;
+
+        }
+
+        .flexible {
+            display: none !important;
+        }
+
+    }
+
+    #numbers {
+        min-height: 200px;
+        min-width: 300px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: bold;
+        font-size: 32px;
+        text-align: center;
+    }
+
+    #soroban-trainer {
+        display: none;
+        margin-top: 10px;
+        margin-bottom: 40px;
+    }
+
+    .wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Настройки */
+
+    .settings {
+        width: 100%;
+    }
+
+    .settings ul  {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        list-style-type: none;
+    }
+
+    .settings-item {
+        width: calc(13% - 10px);
+        position: relative;
+        text-align: center;
+        margin: 5px;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .settings-item img {
+        margin-top: 5px;
+    }
+
+    .settings-item a .logo {
+        height: 70px;
+    }
+
+    .settings label {
+        display: block;
+    }
+
+    .settings label img {
+        height: 25px;
+    }
+
+    .settings-item input, select {
+        display: block;
+        border: 2px solid cornflowerblue;
+        text-align: center;
+        border-radius: 3px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        width: 100%;
+        text-align-last:center;
+    }
+
+    option {
+        text-align-last:center;
+    }
+
+    option {
+        text-align: center;
+    }
+
+    /* число */
+
+    .number {
+        font-size: 48px;
+        font-weight: bold;
+        text-align: center;
+        width: 100%;
+        padding: 10px;
+        border: 1px solid black
+    }
+
+    .answer {
+        text-align: center;
+        border-radius: 3px;
+        border: 2px solid cornflowerblue;
+        cursor: pointer;
+        font-size: 2rem;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        width: calc(100% - 12px);
+        margin-bottom: 15px;
+    }
+
+    .button-group {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    #bomb {
+        transition-property: all;
+        transition-duration: 1s;
+    }
+
+    #bomb:hover {
+        -webkit-transform:scale(1.2); /*Webkit: Scale up image to 1.2x original size*/
+        -moz-transform:scale(1.2); /*Mozilla scale version*/
+        -o-transform:scale(1.2); /*Opera scale version*/
+        transition-delay: 0s;
+    }
+
+    button {
+        border: none;
+    }
+
+    .button {
+        color: white;
+        text-align: center;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 1.5rem;
+        font-weight: bold;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        margin: 5px;
+        text-transform: uppercase;
+        width: calc(50% - 15px);
+    }
+
+    .green {
+        background-color: var(--green);
+    }
+
+    .blue {
+        background-color: var(--blue);
+    }
+
+    .green-color {
+        color: var(--green);
+    }
+
+    .blue-color {
+        color: var(--blue);
+    }
+
+    /* Переключатель */
+
+    .switch-wrap {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 30px;
+    }
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 30px;
+        margin-top: 15px;
+    }
+
+    /* Hide default HTML checkbox */
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    /* The slider */
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0px;
+        left: 0;
+        right: 0;
+        bottom: 0px;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 22px;
+        width: 22px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+    /* Соробан */
+
+    .wrap-sky {
+        position: relative;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-evenly;
+        width: 800px;
+        height: 100px;
+        border: 3px solid black;
+        margin: 0 auto;
+    }
+
+    .wrap-earth {
+        position: relative;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-evenly;
+        width: 800px;
+        height: 220px;
+        border: 3px solid black;
+        margin: 0 auto;
+    }
+
+    .column {
+        border-right: 2px solid black;
+        width: 35px;
+    }
+
+    .box {
+        position: absolute;
+        background-image: url("http://razvitie-intellekta.ru/f/bead_inactive.png");
+        background-size: 100%;
+        background-position: center center; /* Положение фона */
+        background-repeat: no-repeat; /* Отменяем повторение фона */
+        bottom: 0;
+        margin: 0;
+        width: 70px;
+        height: 40px;
+    }
+
+    .sky {
+        top: 20px;
+    }
+
+</style>
+<body>
+<div class="wrap">
+    <div class="settings">
+        <ul>
+            <li class="settings-item">
+                <label for="select_level">Ступень: </label>
+                <select id="select_level">
+                    <option value="0">1</option>
+                </select>
+            </li>
+
+            <li class="settings-item">
+                <label for="select_page">Страница: </label>
+                <select id="select_page"></select>
+            </li>
+
+            <li class="settings-item">
+                <label for="select_string">Строчка: </label>
+                <select id="select_string"></select>
+            </li>
+
+            <li class="settings-item mobile-count">
+                <label for="select_page" class="blue-color">&#35;</label>
+                <div id="current"></div>
+            </li>
+
+            <li class="settings-item mobile-count">
+                <label for="select_page" class="green-color">&#10004;</label>
+                <div id="completed"></div>
+            </li>
+            
+            <li class="settings-item mobile-count">
+                <img id="menar" src="http://razvitie-intellekta.ru/f/menar_0.jpg" width="100" alt="">
+                <div class="switch-wrap" itemtype="switcher">
+                    <label class="switch" itemtype="switcher">
+                        <input type="checkbox">
+                        <span class="slider round" id="switcher"></span>
+                    </label>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div id="numbers">Выберите&nbsp;сложность и&nbsp;нажмите "Новый&nbsp;пример"</div>
+    <div id="soroban-trainer">
+        <div id="soroban-5" class="wrap-sky"></div>
+        <div id="soroban" class="wrap-earth"></div>
+    </div>
+    <input id="input-answer" type="number" class="answer" placeholder="введите ответ">
+
+    <div class="button-group">
+        <button id="answer" class="button green">Ответить</button>
+        <button id="start" class="button blue" >Новый пример</button>
+    </div>
+
+</div>
+</body>
+
+<script>
+    eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('b q=0;b H=0;b 1b=0;b E=a;b 1c=0;b I=0;b h=[];b 1v=[[[1,1,2],[2,2,4],[3,3,6],[4,4,8],[5,5,10],[6,6,12],[7,7,14],[8,8,16],[9,9,18],[10,10,20]]];b 1w=[[[1,1],[2,2],[3,3],[4,4],[5,5],[6,6],[7,7],[8,8],[9,9],[10,10],[14,14],[A,A],[1x,1x],[1y,1y],[1z,1z],[1A,1A],[A,A],[1B,1B],[25,25],[2k,2l],[27,27],[1C,1C],[1D,1D],[1E,1E],[15,15],[1F,1F],[1G,1G],[1H,1H],[1I,1I],[1d,1d],[1J,1J],[1K,1K],[1L,1L],[1M,1M],[1N,1N],[1O,1O],[1P,1P],[1e,1e],[1d,1d],[1Q,1Q],[1R,1R],[1S,1S],[1T,1T],[1U,1U],[1V,1V],[1f,1f],[1e,1e],[1W,1W],[1f,1f],[1X,1X]]];b J=[1v,1w];2m.2n=()=>{1c=J[$(\'#u\').e()].r;I=J[$(\'#u\').e()][$(\'#u\').e()].r/10;1Y();1Z();21();22();23();1m()};v 1Y=()=>{k(b i=0;i<6;i++){$(\'#K-5\').L(`<s Z="11"><s m="${i}5"Z="24 2o"></s></s>`);d(i>=3)$(`#${i}5`).2p().26(\'28\')}};v 1Z=()=>{k(b i=0;i<6;i++){$(\'#K\').L(`<s m="11-${i}"Z="11"></s>`);k(b j=3;j>=0;j--){$(`#11-${i}`).L(`<s m="${i}${j}"Z="24"></s>`)}d(i>=3)$(`#11-${i}`).26(\'28\')}};v 23=()=>{q=0;H=0;1b=0;b 1n=[];h=[];d($(\'#u\').e()<2){$(\'#29\').c(\'o\',\'M\');1c=J[$(\'#u\').e()].r;I=J[$(\'#u\').e()][$(\'#17\').e()-1].r/10;1n=J[$(\'#u\').e()][$(\'#17\').e()-1]}k(b i=$(\'#N\').e()*10-10;i<$(\'#N\').e()*10;i++){h.2q(1n[i])}$(\'#2a\').1g(`${H}`)};v 21=()=>{$(\'#17\').1o(\'\');k(b i=1;i<=1c;i++){$(\'#17\').L(`<1h 2b="${i}">${i}</1h>`)}};v 22=()=>{$(\'#N\').1o(\'\');k(b i=1;i<=I;i++){$(\'#N\').L(`<1h 2b="${i}">${i}</1h>`)}};v 1i=(n)=>{d(n===-1){$(\'#1p\').c(\'o\',\'19\');$(\'.1q-1r\').c(\'o\',\'2c-M\');2d.2e(\'2r 2s\')}B d(I===l($(\'#N\').e())||I-n===l($(\'#N\').e())){$(\'#1p\').c(\'o\',\'M\');$(\'.1q-1r\').c(\'o\',\'19\');d(E===p)$(\'#2f\').2t(\'O\');2d.2e(E)}B{$(\'#1p\').c(\'o\',\'19\');$(\'.1q-1r\').c(\'o\',\'2c-M\')}};1s=()=>{2g();d($(\'#u\').e()>1){1i(1)}B d($(\'#u\').e()==0&&$(\'#17\').e()<3){1i(-1)}B 1i(0);$(\'#g\').w(\'1a\',a);$(\'#z-g\').w(\'1a\',a);$(\'#29\').w(\'1a\',a);$(\'#z-g\').2u();$(\'#P\').c(\'1t\',\'2v\');$(\'#z-g\').e(\'\');d(q>=h.r){$(\'#P\').1g(`Правильно:${H}из${h.r}`)}B $(\'#P\').1o(\'\');k(b i=0;i<h[q].r-1;i++){$(\'#P\').L(`<s Z="2w">${h[q][i]}</s>`)}q++;1b++;$(\'#2x\').1g(`${1b}из${h.r}`)};g=()=>{d($(\'#z-g\').e()===h[q-1][h[q-1].r-1].2y()||E===p&&F===h[q-1][h[q-1].r-1]){$(\'#z-g\').e(\'\');$(\'#P\').c(\'1t\',\'2h(--2z)\');H++;$(\'#g\').w(\'1a\',p);$(\'#z-g\').w(\'1a\',p)}B{$(\'#P\').c(\'1t\',\'2h(--2A)\')}$(\'#2a\').1g(`${H}`)};$(\'#2f\').O(()=>{E=E!==p;d(E===p){$(\'#K-2i\').c(\'o\',\'M\');$(\'#z-g\').c(\'o\',\'19\')}B{$(\'#K-2i\').c(\'o\',\'19\');$(\'#z-g\').c(\'o\',\'M\')}});$(\'#1s\').O(()=>1s());$(\'#g\').O(()=>g());$(\'#z-g\').2B(()=>{d(G.2C===13)g()});b C=[[a,a,a,a],[a,a,a,a],[a,a,a,a],[a,a,a,a],[a,a,a,a],[a,a,a,a]];b Q=[[a],[a],[a],[a],[a],[a]];b F=0;b t=20;v 1u=(x,y)=>{b D=0;d(C[x][y]===p){D=l($(`#${x}${y}`).c(\'t\'))+A;F+=10**l(`${x}`)}d(C[x][y]===a){D=l($(`#${x}${y}`).c(\'t\'))-A;F-=10**l(`${x}`)}$(`#${x}${y}`).c(\'t\',D)};v 1m=()=>{k(b i=3;i>=0;i--){k(b j=0;j<6;j++){$(`#${j}${i}`).c(\'t\',t).c(\'R-S\',\'T("U://V-W.X/f/1j.Y")\')}t+=2D}};v 2g=()=>{C=[[a,a,a,a],[a,a,a,a],[a,a,a,a],[a,a,a,a],[a,a,a,a],[a,a,a,a]];Q=[[a],[a],[a],[a],[a],[a]];F=0;t=20;1m();k(b i=0;i<6;i++){$(`#${i}${5}`).c(\'1k\',20).c(\'R-S\',\'T("U://V-W.X/f/1j.Y")\')}};$(\'#K\').O((G)=>{b x=0;b y=0;x=$(`#${G.1l.m}`).w(\'m\')[0];y=$(`#${G.1l.m}`).w(\'m\')[1];d(C[x][y]===a){k(b i=y;i>=0;i--){C[x][i]=p;d((l($(`#${x}${i}`).c(\'t\'))%10===0)){$(`#${x}${i}`).c(\'R-S\',\'T("U://V-W.X/f/2j.Y")\');1u(x,i)}}}B d(C[x][y]===p){k(b i=y;i<4;i++){C[x][i]=a;d(!(l($(`#${x}${i}`).c(\'t\'))%10===0)){$(`#${x}${i}`).c(\'R-S\',\'T("U://V-W.X/f/1j.Y")\');1u(x,i)}}}});$(\'#K-5\').O((G)=>{b x=0;b y=0;b D=0;x=$(`#${G.1l.m}`).w(\'m\')[0];y=$(`#${G.1l.m}`).w(\'m\')[1];Q[x][y]=Q[x][y]!==p;d(Q[x][y]===p){$(`#${x}${y}`).c(\'R-S\',\'T("U://V-W.X/f/2j.Y")\');D=l($(`#${x}${y}`).c(\'1k\'))+A;F+=10**l(`${x}`)*5}d(Q[x][y]===a){$(`#${x}${y}`).c(\'R-S\',\'T("U://V-W.X/f/1j.Y")\');D=l($(`#${x}${y}`).c(\'1k\'))-A;F-=10**l(`${x}`)*5}$(`#${x}${y}`).c(\'1k\',D)});',62,164,'||||||||||false|let|css|if|val||answer|arr_nums|||for|parseInt|id||display|true|index|length|div|bottom|select_level|const|prop|||input|35|else|toggle_bead|temp_bottom|toggle_soroban|sum|event|right_counter|string_amount|notebook_nums|soroban|append|block|select_string|click|numbers|toggle_bead_5|background|image|url|http|razvitie|intellekta|ru|png|class||column||||||select_page||none|disabled|current_counter|page_amount|129|483|972|text|option|mental_card|bead_inactive|top|target|draw_earth_beans|temp|html|menar|switch|wrap|start|color|move_bead|level_1|level_2|84|54|72|82|95|41|66|33|75|92|831|245|849|621|317|512|351|645|384|348|517|299|123|975|761|391|715|create_sky|create_earth||make_settings_page|make_settings_string|reset_settings|box||addClass||flexible|bomb|completed|value|inline|console|log|switcher|reset_soroban|var|trainer|bead_active|42|642|window|onload|sky|parent|push|no|mental|trigger|focus|black|number|current|toString|green|red|keypress|keyCode|40'.split('|'),0,{}))
+</script>
+</html>
