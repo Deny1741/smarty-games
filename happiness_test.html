@@ -126,11 +126,11 @@
 
 
             for (let i = 1; i < data.length - 1; i++) {
-                if (data[i][5 + j * 2] !== "" && data[i][5 + j * 2] !== "NaN") points[j].push(data[i][5 + j * 2]);
+                if (data[i][5 + j * 2] !== "" && !isNaN(parseInt(data[i][5 + j * 2]))) points[j].push(data[i][5 + j * 2]);
 
                 // Люди с двумя тестами
-                if (data[i][5] !== "" && data[i][5] !== "NaN" && parseInt(data[i][5]) < parseInt(data[i][7 + j * 2])) counterHappy++;
-                if (data[i][5] !== "" && data[i][5] !== "NaN" && parseInt(data[i][5]) >= parseInt(data[i][7 + j * 2])) counterSad++;
+                if (data[i][5] !== "" && !isNaN(parseInt(data[i][5])) && parseInt(data[i][5]) < parseInt(data[i][7 + j * 2])) counterHappy++;
+                if (data[i][5] !== "" && !isNaN(parseInt(data[i][5])) && parseInt(data[i][5]) >= parseInt(data[i][7 + j * 2])) counterSad++;
             }
 
             people[j + 1].push(counterHappy);
