@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/JavaScript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" ></script>
+    <script type="text/JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.js" ></script>
+
+    <title>Оценка 6 сфер</title>
+</head>
+<style>
+    .wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-family: Verdana,serif;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .table {
+        margin-bottom: 50px;
+    }
+
+    .result-table {
+        margin-bottom: 40px;
+    }
+
+    .result-table tr:nth-child(1) {
+        background: #008CBA;
+        color: white;
+    }
+
+    .result-table tr {
+        background: #D8E6F3;
+    }
+
+    .result-table th {
+        padding: 10px 3px;
+        margin-bottom: 5px;
+
+    }
+
+
+    #file-label {
+        margin-top: 20px;
+        background: #ff3366;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        text-align: center;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        text-transform: uppercase;
+        width: 300px;
+        transition-property: all;
+        transition-duration: 1s;
+    }
+
+    #file-label:hover {
+        color: white;
+    }
+
+    .inputfile {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+    }
+
+</style>
+<body>
+
+<div class="wrapper">
+    <input name="file" type="file" id="file" class="inputfile">
+    <label for="file" id="file-label">Загрузить файл</label>
+    <h1>Оценка 6 сфер</h1>
+    <table id="result-table" class="result-table table"></table>
+    <div id="result-table-results"></div>
+
+</div>
+
+<script>
+
+    $(document).on('change', 'input[type="file"]', function () {
+        $("#file").parse({
+            config: {
+                complete: function(results, file) {
+                    let data = results.data;
+                    let [points, changes, counters] = createMarksObject(data);
+
+                    createTable(points, changes, counters);
+
+                }
+            },
+        });
+
+    });
+
+    // рисуем таблицу
+    const createTable = (points, changes, counters) => {
+
+        $('#result-table').append(`<tr><th>#</th><th>Кол-во</th><th colspan="3">Самореализация</th><th colspan="3">Отношения</th><th colspan="3">Любовь</th><th colspan="3">Здоровье</th><th colspan="3">Отдых</th><th colspan="3">Финансы</th></tr>`);
+        $('#result-table').append(`<tr><th></th><th></th><th>Текущее</th><th>Желаемое</th><th>%</th><th>Текущее</th><th>Желаемое</th><th>%</th><th>Текущее</th><th>Желаемое</th><th>%</th><th>Текущее</th><th>Желаемое</th><th>%</th><th>Текущее</th><th>Желаемое</th><th>%</th><th>Текущее</th><th>Желаемое</th><th>%</th></tr>`);
+
+        for (let i = 0; i < 13; i++) {
+            if (counters[i][0] === 0) break;
+
+            $('#result-table').append(`<tr><th>${i + 1}</th></tr>`);
+            $(`#result-table tr:eq(${i + 2})`).append(`<th>${counters[i][0]}</th>`);
+
+            for (let j = 0; j < 6; j++) {
+                if (points[i][j * 2] !== undefined && points[i][j * 2 + 1] !== undefined) $(`#result-table tr:eq(${i + 2})`).append(`<th>${points[i][j * 2]}</th><th>${points[i][j * 2 + 1]}</th><th>${changes[i][j]}</th>`);
+            }
+
+            for (let k = 4; k < 20; k += 3) {
+                $(`#result-table tr:eq(${i + 2}) th:eq(${k})`).css('background', '#bbd5ed');
+            }
+
+        }
+
+    }
+
+    // создаем объект из курсов
+    const createMarksObject = (data) => {
+        let arr = [];
+
+        for (let j = 0; j < 13; j++) {
+            arr.push([]);
+            for (let i = 4 + 12 * j; i < 4 + 12 * j + 12; i++) {
+                arr[j].push([]);
+                for (let k = 1; k < data.length; k++) {
+                    if (data[k][i + 1] !== undefined && i % 2 === 0 && parseInt(data[k][i + 1]) !== 0) arr[j][i - 4 - 12 * j].push(data[k][i]);
+                    else if (data[k][i + 1] !== undefined && i % 2 !== 0 && parseInt(data[k][i]) !== 0) arr[j][i - 4 - 12 * j].push(data[k][i]);
+                }
+            }
+        }
+
+        let arrPoints = [];
+        let arrChanges = [];
+        let arrCounters = [];
+
+        for (let i = 0; i < 13; i++) {
+            arrPoints.push([]);
+            arrChanges.push([]);
+            arrCounters.push([]);
+
+            for (let j = 0; j < arr[i].length; j++) {
+                let sum = 0;
+                for (let k = 0; k < arr[i][j].length; k++) {
+                    sum += parseInt(arr[i][j][k]);
+                }
+
+                let result = Math.round(parseFloat(sum / arr[i][j].length) * 100) / 100;
+
+                if (!isNaN(result)) arrPoints[i].push(result);
+
+                if (j > 0 && j % 2 !== 0) {
+                    arrChanges[i].push(Math.round(parseFloat(arrPoints[i][j] - arrPoints[i][j -1]) * 100) / 100);
+                    arrCounters[i].push(arr[i][j].length);
+                }
+            }
+        }
+
+        return [arrPoints, arrChanges, arrCounters];
+
+    }
+
+    function truncated(num) {
+        return Math.trunc(num * 100) / 100;
+    }
+
+
+
+
+
+</script>
+</body>
+</html>
