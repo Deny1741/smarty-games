@@ -109,8 +109,10 @@
 <script>
 
     $(document).ready( function() {
-        document.getElementById("start").value = moment().subtract(7,'d').format('YYYY-MM-DD');;
-        document.getElementById("finish").value = moment().format('YYYY-MM-DD');
+        let start = moment().format('YYYY-MM-DD');
+        let today = moment().format('YYYY-MM-DD');
+        document.getElementById("start").value = moment().subtract(30,'d').format('YYYY-MM-DD');;
+        document.getElementById("finish").value = today;
     });
 
 
@@ -135,43 +137,18 @@
         let firstPoint = 1;
 
         for (let i = 1; i < data.length; i++) {
+
             if (Date.parse(firstDate) > Date.parse(data[i][3].split(' ')[0])) {
                 firstPoint++;
             }
             else break;
         }
 
-        let finishDate = $('#finish').val();
-        let finishPoint = data.length;
-
-        for (let i = data.length - 1; i > 0; i--) {
-            if (Date.parse(finishDate) < Date.parse(data[i][3].split(' ')[0])) {
-                finishPoint--;
-            }
-            else break;
-        }
-
-        let temp = [];
-        let users = [];
-
-
-
-        // удалить дубликаты
-        for (let i = 1; i < data.length; i++) {
-            users.push(data[i][1]);
-        }
-
-        users = [...new Set(users)].filter(Boolean)
-
-        console.log(users);
-
-
-
 
      //   console.log(Date.parse(data[1][3].split(' ')[0]) - Date.parse(data[2][3].split(' ')[0]));
      //   console.log(Date.parse(data[2][3].split(' ')[0]));
 
-        for (let i = firstPoint; i < finishPoint; i++) {
+        for (let i = firstPoint; i < data.length; i++) {
             names.push(data[i][4])
         }
 
@@ -182,14 +159,17 @@
             tableResultArr[names[i]] = [];
         }
 
-        for (let i = firstPoint; i < finishPoint; i++) {
+        for (let i = firstPoint; i < data.length; i++) {
             for (let j = 0; j < names.length; j++) {
-                if (names[j] === data[i][4]) {
-                    tableResultArr[names[j]].push(parseInt(data[i][5]));
+                for (let k = 12; k > 1; k -= 4) {
+                    if (names[j] === data[i][k]) {
+                        tableResultArr[names[j]].push(parseInt(data[i][k + 1]));
+                        break;
+                    }
                 }
+
             }
         }
-
 
         let k = Object.keys(tableResultArr);
         let tableResult = [];
