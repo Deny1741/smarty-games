@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/JavaScript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" ></script>
+    <script type="text/JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.js" ></script>
+    <script type="text/JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" ></script>
+
+
+    <title>Оценка кураторов</title>
+</head>
+<style>
+    .date-wrap {
+        display: flex;
+        gap: 10px;
+    }
+
+    .date-wrap div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .date-wrap label {
+        margin-bottom: 5px;
+    }
+
+    .wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-family: Verdana,serif;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    #result-table tr:nth-child(1) {
+        background: #008CBA;
+        color: white;
+    }
+
+    #result-table tr {
+        background: #D8E6F3;
+    }
+
+    #result-table th {
+        padding: 10px;
+    }
+
+
+    #file-label {
+        margin-top: 20px;
+        background: #ff3366;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        text-align: center;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        text-transform: uppercase;
+        width: 300px;
+        transition-property: all;
+        transition-duration: 1s;
+    }
+
+    #file-label:hover {
+        color: white;
+    }
+
+    .inputfile {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+    }
+
+</style>
+<body>
+
+<div class="wrapper">
+    <div class="date-wrap">
+        <div>
+            <label for="start">Начало:</label>
+            <input type="date" id="start" name="trip-start">
+        </div>
+
+        <div>
+            <label for="start">Конец:</label>
+            <input type="date" id="finish" name="trip-start">
+        </div>
+    </div>
+
+    <input name="file" type="file" id="file" class="inputfile">
+    <label for="file" id="file-label">Загрузить файл</label>
+    <h1>Оценка кураторов</h1>
+    <table id="result-table" class="table"></table>
+</div>
+
+<script>
+
+    $(document).ready( function() {
+        document.getElementById("start").value = moment().subtract(7,'d').format('YYYY-MM-DD');;
+        document.getElementById("finish").value = moment().format('YYYY-MM-DD');
+    });
+
+
+    $(document).on('change', 'input[type="file"]', function () {
+        $("#file").parse({
+            config: {
+                complete: function(results, file) {
+                    let data = results.data;
+                    let table = getTableResult(data);
+                    createTable(table);
+                }
+            },
+        });
+
+    });
+
+    const getTableResult = (data) => {
+        let names = [];
+        let tableResultArr = [];
+
+        let firstDate = $('#start').val();
+        let firstPoint = 1;
+
+        for (let i = 1; i < data.length; i++) {
+            if (Date.parse(firstDate) > Date.parse(data[i][3].split(' ')[0])) {
+                firstPoint++;
+            }
+            else break;
+        }
+
+        let finishDate = $('#finish').val();
+        let finishPoint = data.length;
+
+        for (let i = data.length - 1; i > 0; i--) {
+            if (Date.parse(finishDate) < Date.parse(data[i][3].split(' ')[0])) {
+                finishPoint--;
+            }
+            else break;
+        }
+
+        let temp = [];
+        let users = [];
+
+
+
+        // удалить дубликаты
+        for (let i = 1; i < data.length; i++) {
+            users.push(data[i][1]);
+        }
+
+        users = [...new Set(users)].filter(Boolean)
+
+        console.log(users);
+
+
+
+
+     //   console.log(Date.parse(data[1][3].split(' ')[0]) - Date.parse(data[2][3].split(' ')[0]));
+     //   console.log(Date.parse(data[2][3].split(' ')[0]));
+
+        for (let i = firstPoint; i < finishPoint; i++) {
+            names.push(data[i][4])
+        }
+
+        names = [...new Set(names)].filter(Boolean)
+        console.log(names);
+
+        for (let i = 0; i < names.length; i++) {
+            tableResultArr[names[i]] = [];
+        }
+
+        for (let i = firstPoint; i < finishPoint; i++) {
+            for (let j = 0; j < names.length; j++) {
+                if (names[j] === data[i][4]) {
+                    tableResultArr[names[j]].push(parseInt(data[i][5]));
+                }
+            }
+        }
+
+
+        let k = Object.keys(tableResultArr);
+        let tableResult = [];
+
+        console.log(tableResultArr);
+
+        k.map((r)=>{
+            let sum = tableResultArr[r].reduce((a, b) => a + b, 0);
+            let result = sum / tableResultArr[r].length;
+            //tableResult[r] = truncated(result);
+            tableResult[r] = [truncated(result), tableResultArr[r].length];
+        });
+
+        console.log(tableResult);
+
+        return tableResult;
+    };
+
+    function truncated(num) {
+        return Math.trunc(num * 100) / 100;
+    }
+
+    const createTable = (table) => {
+        let arr = Object.entries(table);
+        arr.sort((a,b) => b[1][0] - a[1][0]);
+
+        $('#result-table').append(`<tr><th>#</th><th>Имя</th><th>Средняя оценка</th><th>Кол-во оценок</th></tr>`);
+
+        for (let i = 0; i < arr.length; i++) {
+            $('#result-table').append(`<tr><th>${i + 1}</th><th>${arr[i][0]}</th><th>${arr[i][1][0]}</th><th>${arr[i][1][1]}</th></tr>`);
+        }
+        for (let i = 0; i < arr.length; i++) {
+        //    $('#result-table tr:eq(i)').append(`<th>${arr[0][0]}</th>`);
+          //  $('#result-table tr:eq(i)').append(`<th>${arr[1][1][0]}</th>`);
+            //$('#result-table tr:eq(i)').append(`<th>${arr[2][1][1]}</th>`);
+        }
+    }
+
+</script>
+</body>
+</html>
