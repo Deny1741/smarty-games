@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/JavaScript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" ></script>
+    <script type="text/JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.js" ></script>
+
+    <title>Оценка уроков</title>
+</head>
+<style>
+    .wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-family: Verdana,serif;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .table {
+        margin-bottom: 50px;
+    }
+
+    .result-table {
+        margin-bottom: 40px;
+    }
+
+    .result-table tr:nth-child(1) {
+        background: #008CBA;
+        color: white;
+    }
+
+    .result-table tr {
+        background: #D8E6F3;
+    }
+
+    .result-table th {
+        padding: 10px;
+    }
+
+
+    #file-label {
+        margin-top: 20px;
+        background: #ff3366;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        text-align: center;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        text-transform: uppercase;
+        width: 300px;
+        transition-property: all;
+        transition-duration: 1s;
+    }
+
+    #file-label:hover {
+        color: white;
+    }
+
+    .inputfile {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+    }
+
+</style>
+<body>
+
+<div class="wrapper">
+    <input name="file" type="file" id="file" class="inputfile">
+    <label for="file" id="file-label">Загрузить файл</label>
+    <h1>Оценка уроков</h1>
+    <table id="result-table" class="result-table table"></table>
+    <div id="result-table-results"></div>
+
+</div>
+
+<script>
+
+    $(document).on('change', 'input[type="file"]', function () {
+        $("#file").parse({
+            config: {
+                complete: function(results, file) {
+                    let data = results.data;
+                    let marksObject = createMarksObject(data);
+
+                    createGeneralTable(marksObject);
+
+                    for (let i = 0; i < Object.keys(marksObject).length; i++) {
+                        createTrainingTable(marksObject, Object.keys(marksObject)[i], i);
+                    }
+
+
+                }
+            },
+        });
+
+    });
+
+    // Таблица по одному курсу
+    const createTrainingTable = (marksObject, training, index) => {
+
+        $('#result-table-results').append(`<table id='table-${index}' class="result-table table"></table>`);
+
+        $(`#table-${index}`).append(`<tr><th>#</th><th>Название урока</th><th>Средняя оценка</th><th>Кол-во оценок</th></tr>`);
+
+        let i = 1;
+
+        for (let [key, value] of marksObject[training]) {
+            //  console.log(key + ' = ' + value);
+
+            let sum = 0;
+
+            //  let arrGrades = marksObject['НТ 7.0'].get(key);
+
+            for (let i = 0; i < value.length; i++) {
+                sum += parseInt(value[i]);
+            }
+
+            let averageGrade = Math.round((sum/value.length + Number.EPSILON) * 100) / 100
+            console.log(key + ': ' + averageGrade + ' : ' + value.length);
+
+
+            $(`#table-${index}`).append(`<tr><th>${i}</th><th>${key}</th><th>${averageGrade}</th><th>${value.length}</th></tr>`);
+
+            i++;
+        }
+    }
+
+    // Таблица по всем курсам
+    const createGeneralTable = (marksObject) => {
+        $('#result-table').append(`<tr><th>#</th><th>Тренинг</th><th>Средняя оценка</th><th>Кол-во оценок</th></tr>`);
+
+        let i = 1;
+
+        for (let courseName of Object.keys(marksObject)) {
+
+            let arrRating = [];
+            let averageRating = 0;
+
+            for (let [key, value] of marksObject[courseName]) {
+                // console.log(key);
+                arrRating.push(value);
+            }
+
+            arrRating = arrRating.flat().map(Number).filter((el) => el > 0);
+
+            let sum = 0;
+            for (let i = 0; i < arrRating.length; i++) {
+                sum += arrRating[i];
+            }
+
+
+            averageRating = truncated(sum / arrRating.length);
+
+
+            $('#result-table').append(`<tr><th>${i}</th><th>${courseName}</th><th>${averageRating}</th><th>${arrRating.length}</th></tr>`);
+
+            i++;
+
+        }
+
+    }
+
+
+    // создаем объект из курсов
+    const createMarksObject = (data) => {
+        let courseNames = [];
+        let marks = {};
+
+        for (let i = 1; i < data.length; i++) {
+            courseNames.push(data[i][5])
+        }
+
+        // получаем уникальные имена курсов
+        courseNames = [...new Set(courseNames)].filter(Boolean);
+
+        for (let i = 0; i < courseNames.length; i++) {
+            marks[courseNames[i]] = new Map();
+        }
+
+        for (let i = 1; i < data.length; i++) {
+            for (let j = 0; j < courseNames.length; j++) {
+                if (data[i][5] === courseNames[j]) {
+                    if (typeof marks[courseNames[j]].get(data[i][6]) === "undefined") marks[courseNames[j]].set(data[i][6], []);
+                    marks[courseNames[j]].get(data[i][6]).push(data[i][4]);
+                }
+            }
+        }
+
+        return marks;
+    }
+
+    function truncated(num) {
+        return Math.trunc(num * 100) / 100;
+    }
+
+
+
+
+    /*
+
+    const getTableResult = (data) => {
+        let names = [];
+        let tableResultArr = [];
+
+        for (let i = 1; i < data.length; i++) {
+            names.push(data[i][4])
+        }
+
+        names = [...new Set(names)].filter(Boolean)
+
+        for (let i = 0; i < names.length; i++) {
+            tableResultArr[names[i]] = [];
+        }
+
+        for (let i = 0; i < data.length; i++) {
+            for (let j = 0; j < names.length; j++) {
+                if (names[j] === data[i][4]) {
+                    tableResultArr[names[j]].push(parseInt(data[i][5]));
+                }
+            }
+        }
+
+        let k = Object.keys(tableResultArr);
+        let tableResult = [];
+
+        console.log(tableResultArr);
+
+        k.map((r)=>{
+            let sum = tableResultArr[r].reduce((a, b) => a + b, 0);
+            let result = sum / tableResultArr[r].length;
+            //tableResult[r] = truncated(result);
+            tableResult[r] = [truncated(result), tableResultArr[r].length];
+        });
+
+        return tableResult;
+    };
+
+    function truncated(num) {
+        return Math.trunc(num * 100) / 100;
+    }
+
+    const createTable = (table) => {
+        let arr = Object.entries(table);
+        arr.sort((a,b) => b[1][0] - a[1][0]);
+
+        $('#result-table').append(`<tr><th>#</th><th>Имя</th><th>Средняя оценка</th><th>Кол-во оценок</th></tr>`);
+
+        for (let i = 0; i < arr.length; i++) {
+            $('#result-table').append(`<tr><th>${i + 1}</th><th>${arr[i][0]}</th><th>${arr[i][1][0]}</th><th>${arr[i][1][1]}</th></tr>`);
+        }
+        for (let i = 0; i < arr.length; i++) {
+            //    $('#result-table tr:eq(i)').append(`<th>${arr[0][0]}</th>`);
+            //  $('#result-table tr:eq(i)').append(`<th>${arr[1][1][0]}</th>`);
+            //$('#result-table tr:eq(i)').append(`<th>${arr[2][1][1]}</th>`);
+        }
+    }
+
+     */
+
+</script>
+</body>
+</html>
